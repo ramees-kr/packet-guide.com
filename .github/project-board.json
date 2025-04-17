@@ -1,0 +1,22 @@
+{
+  "name": "Packet Guide Project Board",
+  "description": "Track tasks, features, bugs, and learning progress for each project phase",
+  "columns": [
+    {
+      "name": "🧠 Ideas",
+      "cards": []
+    },
+    {
+      "name": "🛠 To Do",
+      "cards": []
+    },
+    {
+      "name": "⚙️ In Progress",
+      "cards": []
+    },
+    {
+      "name": "✅ Done",
+      "cards": []
+    }
+  ]
+}
