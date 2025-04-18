@@ -1,18 +1,14 @@
 # 📘 Project 02 – DHCP Lease Log Parser
 
-A lightweight Python script that parses DHCP server logs to extract meaningful insights from lease events.
-
-This project helps develop log analysis skills, string parsing, and builds the foundation for real-time alerting and dashboarding systems in later phases.
+A lightweight Python script that parses DHCP server logs to extract meaningful insights from lease events. This project helps develop log analysis skills, string parsing, and builds the foundation for real-time alerting and dashboarding systems in later phases.
 
 ---
 
 ## 🧭 Overview
 
-In a real-world network, the DHCP server assigns IPs dynamically to devices. These assignments are logged — and those logs are gold.
+In a real-world network, the DHCP server assigns IPs dynamically to devices. These assignments are logged — and those logs are gold. This project builds a tool that:
 
-This project builds a tool that:
-
-- Parses standard DHCP log files (e.g., ISC DHCP or dnsmasq)
+- Parses standard DHCP log files (e.g., Kea DHCP or dnsmasq)
 - Extracts IP, MAC address, and hostname for every lease event
 - Outputs the result to console or a structured log file
 - Helps visualize and later alert on network events
@@ -22,16 +18,16 @@ This project builds a tool that:
 ## 🛠 Tech Stack
 
 - Python 3.x
-- Regular Expressions (re module)
-- argparse or Click for CLI
-- Optional: pandas or csv for output
-- Sample logs from dnsmasq or ISC DHCP
+- Regular Expressions (re module) or JSON parsing (for Kea)
+- `argparse` or `Click` for CLI
+- Optional: `pandas` or `csv` for output
+- Sample logs from Kea DHCP or dnsmasq
 
 ---
 
 ## 🎯 Goals
 
-- Learn DHCP lease formats and log patterns
+- Learn DHCP lease formats and log patterns (especially for Kea)
 - Practice reading & parsing real logs
 - Track IP usage and host activity over time
 - Prepare for building alerting/monitoring on top of log events
@@ -40,24 +36,24 @@ This project builds a tool that:
 
 ## 🚀 Getting Started
 
-1. Clone the project:
+1.  Clone the project:
+    ```bash
+    git clone https://github.com/your-username/packet-guide.com.git
+    cd packet-guide.com/projects/02_dhcp_log_parser
+    ```
+2.  Install dependencies:
+    ```bash
+    pip install rich
+    ```
+3.  Run the script (adjust log path/format for Kea):
 
-```bash
-git clone https://github.com/your-username/packet-guide.com.git
-cd packet-guide.com/projects/02_dhcp_log_parser
-```
+    ```bash
+    # Example for Kea JSON logs (path may vary)
+    python dhcp_log_parser.py --file examples/kea-dhcp4.log --format json
 
-2. Install dependencies:
-
-```bash
-pip install rich
-```
-
-3. Run the script:
-
-```bash
-python dhcp_log_parser.py --file examples/dhcpd.log
-```
+    # Example for dnsmasq logs
+    python dhcp_log_parser.py --file examples/dnsmasq.log --format text
+    ```
 
 ---
 
@@ -73,20 +69,15 @@ python dhcp_log_parser.py --file examples/dhcpd.log
 
 ## 🧪 Example Output
 
-From ISC-DHCP log line:
-
-```
-Apr 10 12:01:45 dhcpd: DHCPACK on 192.168.0.101 to aa:bb:cc:dd:ee:ff (laptop-01)
-```
-
-Parsed:
+Kea DHCP often logs in JSON format. A parsed lease might look like this (structure depends on Kea logging configuration):
 
 ```json
 {
   "ip": "192.168.0.101",
   "mac": "aa:bb:cc:dd:ee:ff",
   "hostname": "laptop-01",
-  "timestamp": "2025-04-10 12:01:45"
+  "timestamp": "2025-04-10T12:01:45Z",
+  "lease_type": "DHCP4_LEASE_ADVERT"
 }
 ```
 
@@ -97,7 +88,8 @@ Parsed:
 ```
 dhcp_log_parser.py      # Main script
 examples/
-├── dhcpd.log           # Sample DHCP logs
+├── kea-dhcp4.log       # Sample Kea DHCP logs (JSON or text)
+├── dnsmasq.log         # Sample dnsmasq logs
 ├── output.json         # Optional structured results
 README.md               # You're here
 ```
@@ -109,15 +101,15 @@ README.md               # You're here
 To be updated while building:
 
 - DHCP lease mechanics
-- How log messages are formatted and rotated
-- Regex and string parsing for semi-structured logs
+- How log messages are formatted (text vs. JSON) and rotated
+- Regex and string parsing for semi-structured logs, or JSON parsing for Kea
 - Importance of parsing vs. tailing vs. streaming
 
 ---
 
 ## 🔁 Next Steps
 
-- Add MAC filtering (--mac aa:bb:cc)
+- Add MAC filtering (`--mac aa:bb:cc`)
 - Support live log tailing
 - Export metrics to Prometheus later
 
@@ -128,3 +120,5 @@ To be updated while building:
 - “Parsing DHCP Logs: The Gateway to Network Observability”
 - “How I Built a Python Tool to Track Lease Events”
 - “From Logs to Alerts: A Beginner’s Journey with DHCP”
+
+---
