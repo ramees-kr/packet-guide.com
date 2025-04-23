@@ -173,3 +173,4 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 projects/all_projects_readme2.txt
+docs/pending_plan.md

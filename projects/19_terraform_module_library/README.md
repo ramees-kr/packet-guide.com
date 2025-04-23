@@ -12,12 +12,12 @@ Terraform modules allow you to define infrastructure as reusable, versioned comp
 
 In this project you will:
 
-- Write parameterized modules for DNS, Kubernetes application deployments, Ingress resources, cert-manager issuers, and more
+- Write parameterized modules for DNS, Kubernetes deployments, Ingress resources, cert-manager issuers, and more
 - Document module usage via README files and examples
 - Enforce input validation and output consistency
 - Test module behavior using `terraform plan` and (optionally) CI checks
 
-You'll extend the “packet-guide-terraform-library”—usable for personal projects and real deployments, covering both traditional infrastructure and Kubernetes configurations.
+You'll extend the “packet-guide-terraform-library”—usable for personal projects and real deployments, covering both traditional infra and Kubernetes configurations.
 
 ---
 
@@ -69,142 +69,36 @@ modules/
 │   ├── variables.tf
 │   ├── outputs.tf
 │   └── README.md
-├── exporter/
-│   └── ...
-├── pagerduty_route/
-│   └── ...
-examples/                         # Usage examples for each module
-├── dns_record/
-│   └── ...
-├── k8s_app_deployment/
-│   ├── main.tf
-│   └── terraform.tfvars
-tests/                            # Basic validation tests
-├── basic_dns_test.tf
-├── basic_k8s_deploy_test.tf
+└── ... (other modules)
+examples/                         # Usage examples
+tests/                            # Validation tests
 .pre-commit-config.yaml
-README.md                         # This file (Project 19)
+README.md                         # This file
 ```
 
 ---
 
-## 📄 Sample Module: `k8s_app_deployment`
+## 📦 Potential Terraform Modules
 
-### `modules/k8s_app_deployment/variables.tf`
-
-```hcl
-variable "image_name" {
-  type = string
-}
-variable "image_tag" {
-  type = string
-}
-variable "replicas" {
-  type    = number
-  default = 1
-}
-variable "namespace" {
-  type = string
-}
-variable "app_name" {
-  type = string
-}
-variable "container_port" {
-  type = number
-}
-# ... other inputs like labels, resource limits, env vars ...
-```
-
-### `modules/k8s_app_deployment/main.tf`
-
-```hcl
-resource "kubernetes_deployment" "app" {
-  metadata {
-    name      = "${var.app_name}-deployment"
-    namespace = var.namespace
-    labels    = { App = var.app_name }
-  }
-  spec {
-    replicas = var.replicas
-    selector {
-      match_labels = { App = var.app_name }
-    }
-    template {
-      metadata {
-        labels = { App = var.app_name }
-      }
-      spec {
-        container {
-          name  = var.app_name
-          image = "${var.image_name}:${var.image_tag}"
-          port {
-            container_port = var.container_port
-          }
-        }
-      }
-    }
-  }
-}
-
-resource "kubernetes_service" "app" {
-  metadata {
-    name      = "${var.app_name}-service"
-    namespace = var.namespace
-  }
-  spec {
-    selector = { App = var.app_name }
-    port {
-      port        = var.container_port
-      target_port = var.container_port
-    }
-    type = "ClusterIP"
-  }
-}
-```
-
----
-
-## 🚀 Using a Kubernetes Module
-
-### `examples/k8s_app_deployment/main.tf`
-
-```hcl
-provider "kubernetes" {
-  # Configuration options
-}
-
-module "simple_api_deployment" {
-  source         = "../../modules/k8s_app_deployment"
-  app_name       = "simple-api"
-  namespace      = "default"
-  image_name     = "yourusername/simple-api"
-  image_tag      = "v1"
-  replicas       = 2
-  container_port = 8080
-}
-```
-
----
-
-## 🧠 What I Learned
-
-- Module input validation and default values
-- Designing module interfaces (variables, outputs, documentation)
-- Allowing user-configured provider settings via aliases
-- Best practices for module directory structure and testing
-- Wrapping Kubernetes resources within Terraform HCL using the Kubernetes provider
-- Parameterizing Kubernetes resources effectively in Terraform modules
-- Trade-offs of managing Kubernetes via Terraform modules vs. Helm or raw YAML
+| Module Name                | Purpose / Origin                                                                                                        | Relevant Projects |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `dns_record_set`           | Manage a set of DNS records (A, CNAME, TXT) within a zone, including DNSSEC state if supported by the provider.         | 10, 14            |
+| `k8s_namespace`            | Create and manage a Kubernetes namespace.                                                                               | 17a, 17b+         |
+| `k8s_app_deployment`       | Deploy a standard application using Deployment & Service; parameterize image, replicas, ports, probes, resource limits. | 17a               |
+| `k8s_ingress_tls`          | Configure an Nginx Ingress resource with TLS termination via cert-manager annotations and secrets.                      | 17b               |
+| `k8s_certmanager_issuer`   | Deploy a cert-manager Issuer or ClusterIssuer (e.g., Let’s Encrypt ACME).                                               | 17b               |
+| `prometheus_exporter_k8s`  | Deploy a standard Prometheus exporter pattern to Kubernetes (Deployment/Service for exporters).                         | 12 (if on K8s)    |
+| `pagerduty_service_config` | Configure PagerDuty services or integrations via Terraform.                                                             | 16                |
 
 ---
 
 ## 🔁 Next Steps
 
 - Tag modules with versions and maintain changelogs
-- Publish modules to a registry (Terraform Registry or internal)
+- Publish modules to Terraform Registry or an internal registry
 - Add CI checks: `terraform validate`, `tfsec`, `tflint`
 - Write comprehensive usage docs in each module’s `README.md`
-- Refactor existing Packet Guide infrastructure (Project 10 & 17a/17b) to consume these modules
+- Refactor existing Packet Guide infrastructure (Projects 10, 17a/17b) to consume these modules
 - Explore Helm provider modules for chart deployments
 
 ---
@@ -213,12 +107,9 @@ module "simple_api_deployment" {
 
 - _Building a Terraform Module Library From Scratch_
 - _How Reusable Modules Saved Me Hours of DevOps Time_
-- _Why Every Infra Team Should Write Their Own Module Registry_
 - _Terraform Modules for Kubernetes: Best Practices and Patterns_
 - _Managing Kubernetes Deployments and Services with Reusable Terraform Modules_
 - _Creating a Terraform Module for cert-manager ClusterIssuers_
-
----
 
 ## 📦 Suggested Modules to Build
 
