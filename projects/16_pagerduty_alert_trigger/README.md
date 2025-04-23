@@ -1,4 +1,4 @@
-# 📘 Project 14 – PagerDuty Alert Trigger (Go)
+# 📘 Project 16 – PagerDuty Alert Trigger (Go)
 
 A Go-based service that listens for specific infra events (e.g. DHCP floods, unknown MACs, DNS record failures) and sends alerts to PagerDuty using the Events API v2.
 

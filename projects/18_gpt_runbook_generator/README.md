@@ -1,4 +1,4 @@
-# 📘 Project 16 – GPT Runbook Generator
+# 📘 Project 18 – GPT Runbook Generator
 
 A Python-based tool that uses GPT (via OpenAI API or local LLM) to generate incident response runbooks based on structured input (like logs, errors, metrics, or alert summaries).
 

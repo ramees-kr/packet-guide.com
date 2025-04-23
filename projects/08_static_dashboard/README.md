@@ -1,4 +1,4 @@
-# 📘 Project 07 – Static Dashboard (HTML)
+# 📘 Project 08 – Static Dashboard (HTML)
 
 A simple HTML+JavaScript dashboard to visually present infrastructure data, generated manually or from previous Packet Guide projects (DNS records, DHCP leases, system info, etc).
 

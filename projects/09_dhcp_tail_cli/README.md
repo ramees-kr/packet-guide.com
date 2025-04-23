@@ -1,4 +1,4 @@
-# 📘 Project 08 – DHCP Tail CLI Tool (Go)
+# 📘 Project 09 – DHCP Tail CLI Tool (Go)
 
 A Go-based command-line tool that “tails” DHCP server logs in real time and prints lease events as structured output. Think: a network-`tail` + filter for DevOps engineers.
 

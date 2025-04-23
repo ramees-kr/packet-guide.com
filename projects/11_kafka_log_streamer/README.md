@@ -1,4 +1,4 @@
-# 📘 Project 10 – Kafka Log Streamer
+# 📘 Project 11 – Kafka Log Streamer
 
 A Go-based tool that streams parsed infrastructure logs (starting with DHCP lease logs) into Apache Kafka, creating the backbone of an observability and alerting pipeline.
 
