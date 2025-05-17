@@ -1,4 +1,14 @@
 // site/src/app/page.tsx
+import type { Metadata } from "next"; // Add this import
+
+// Add this metadata object
+export const metadata: Metadata = {
+  title: "Packet Guide | Home", // Or just 'Packet Guide' if you prefer for home
+  description:
+    "A minimalist developer portfolio and technical blog by Packet Pilot, focusing on cloud, infrastructure, and software engineering.",
+  // You can add keywords here if desired:
+  // keywords: ['portfolio', 'blog', 'cloud engineering', 'infrastructure', 'devops', 'next.js'],
+};
 export default function HomePage() {
   return (
     <div className="py-8">

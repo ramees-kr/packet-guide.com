@@ -199,46 +199,46 @@ The following phases outline the development work required to build the `packet-
 
 **Goal:** Create static content pages (About, Roadmap, Skills) and implement a consistent global navigation system.
 
-- [ ] **3.1: Static Page Content (`site/src/content/pages/`)**
-  - [ ] Create `whoami.md` (for About page).
-  - [ ] Create `roadmap.md` (for Roadmap page).
-  - [ ] Create `skills_summary.md` (for Skills page).
-  - [ ] Add relevant Markdown content to each file.
-- [ ] **3.2: Content Fetching for Static Pages (`lib/content.ts`)**
-  - [ ] Add `getPageContent(pageName: string)` function to `site/src/lib/content.ts`:
-    - [ ] Reads `.md` file from `site/src/content/pages/`.
-    - [ ] Converts Markdown to HTML/MDX content.
-    - [ ] Returns content.
-- [ ] **3.3: Static Page Components**
-  - [ ] Create `site/src/app/about/page.tsx`:
-    - [ ] Fetch content from `whoami.md` using `getPageContent('whoami')`.
-    - [ ] Set page title "About".
-    - [ ] Render content with `prose` styles.
-  - [ ] Create `site/src/app/roadmap/page.tsx`:
-    - [ ] Fetch content from `roadmap.md`.
-    - [ ] Set page title "Roadmap".
-    - [ ] Render content with `prose` styles.
-  - [ ] Create `site/src/app/skills/page.tsx`:
-    - [ ] Fetch content from `skills_summary.md`.
-    - [ ] Set page title "Skills".
-    - [ ] Render content with `prose` styles.
-- [ ] **3.4: Navigation Implementation**
-  - [ ] Update `site/src/components/layout/Header.tsx`:
-    - [ ] Include site title/logo (text-based for minimalism, e.g., "Packet Guide"). Link to `/`.
-    - [ ] Use `NavLink.tsx` for navigation links: Home (`/`), Blog (`/blog`), Projects (`/projects`), Roadmap (`/roadmap`), Skills (`/skills`), About (`/about`).
-    - [ ] Implement logic in `NavLink.tsx` to highlight the current page (use `usePathname` from `next/navigation`).
-    - [ ] Style header: sticky, minimal, subtle background/border.
-    - [ ] Ensure responsiveness (e.g., hamburger menu for mobile or wrap links).
-- [ ] **3.5: Footer Refinement**
-  - [ ] Update `site/src/components/layout/Footer.tsx`:
-    - [ ] Add copyright with current year dynamically (e.g., `© ${new Date().getFullYear()} Packet Guide`).
-    - [ ] (Optional) Add social links or other relevant footer info.
-    - [ ] Minimal styling.
-- [ ] **3.6: Verify Static Pages & Navigation**
-  - [ ] All static pages load their content correctly.
-  - [ ] Navigation links work.
-  - [ ] Current page is highlighted in the navigation.
-  - [ ] Header is sticky and responsive.
+- [*] **3.1: Static Page Content (`site/src/content/pages/`)**
+  - [*] Create `whoami.md` (for About page).
+  - [*] Create `roadmap.md` (for Roadmap page).
+  - [*] Create `skills_summary.md` (for Skills page).
+  - [*] Add relevant Markdown content to each file.
+- [*] **3.2: Content Fetching for Static Pages (`lib/content.ts`)**
+  - [*] Add `getPageContent(pageName: string)` function to `site/src/lib/content.ts`:
+    - [*] Reads `.md` file from `site/src/content/pages/`.
+    - [*] Converts Markdown to HTML/MDX content.
+    - [*] Returns content.
+- [*] **3.3: Static Page Components**
+  - [*] Create `site/src/app/about/page.tsx`:
+    - [*] Fetch content from `whoami.md` using `getPageContent('whoami')`.
+    - [*] Set page title "About".
+    - [*] Render content with `prose` styles.
+  - [*] Create `site/src/app/roadmap/page.tsx`:
+    - [*] Fetch content from `roadmap.md`.
+    - [*] Set page title "Roadmap".
+    - [*] Render content with `prose` styles.
+  - [*] Create `site/src/app/skills/page.tsx`:
+    - [*] Fetch content from `skills_summary.md`.
+    - [*] Set page title "Skills".
+    - [*] Render content with `prose` styles.
+- [*] **3.4: Navigation Implementation**
+  - [*] Update `site/src/components/layout/Header.tsx`:
+    - [*] Include site title/logo (text-based for minimalism, e.g., "Packet Guide"). Link to `/`.
+    - [*] Use `NavLink.tsx` for navigation links: Home (`/`), Blog (`/blog`), Projects (`/projects`), Roadmap (`/roadmap`), Skills (`/skills`), About (`/about`).
+    - [*] Implement logic in `NavLink.tsx` to highlight the current page (use `usePathname` from `next/navigation`).
+    - [*] Style header: sticky, minimal, subtle background/border.
+    - [*] Ensure responsiveness (e.g., hamburger menu for mobile or wrap links).
+- [*] **3.5: Footer Refinement**
+  - [*] Update `site/src/components/layout/Footer.tsx`:
+    - [*] Add copyright with current year dynamically (e.g., `© ${new Date().getFullYear()} Packet Guide`).
+    - [*] (Optional) Add social links or other relevant footer info.
+    - [*] Minimal styling.
+- [*] **3.6: Verify Static Pages & Navigation**
+  - [*] All static pages load their content correctly.
+  - [*] Navigation links work.
+  - [*] Current page is highlighted in the navigation.
+  - [*] Header is sticky and responsive.
 
 ---
 
@@ -246,28 +246,28 @@ The following phases outline the development work required to build the `packet-
 
 **Goal:** Refine typography, implement dark mode, and ensure overall responsive design and mobile-friendliness.
 
-- [ ] **4.1: Typography and Prose Refinement**
-  - [ ] Review all `prose` styled content (blog posts, project details, static pages).
-  - [ ] Fine-tune `tailwind.config.ts` typography settings for readability (font sizes, line heights, spacing, link styles).
-  - [ ] Ensure code blocks within prose are styled well (consider `rehype-pretty-code` or similar for syntax highlighting if not already handled by `@tailwindcss/typography`'s defaults).
-- [ ] **4.2: Dark Mode Implementation**
-  - [ ] Install `next-themes`: `npm install next-themes`.
-  - [ ] Create `site/src/components/ui/ThemeProvider.tsx`.
-  - [ ] Wrap `RootLayout` children with `<ThemeProvider attribute="class" defaultTheme="system" enableSystem>`.
-  - [ ] Create `site/src/components/ui/ThemeToggle.tsx` button to switch between light, dark, and system themes.
-  - [ ] Add `ThemeToggle` button to the `Header.tsx` or another accessible location.
-  - [ ] Verify `dark:` variants in Tailwind are working correctly across all components and prose.
-  - [ ] Ensure `bg-subtle-dark` and `text-default-dark` (or your custom dark theme colors) are applied correctly.
-  - [ ] Check prose dark mode styles (`dark:prose-invert`).
-- [ ] **4.3: Responsive Design Polish**
-  - [ ] Test the entire site on various screen sizes (desktop, tablet, mobile).
-  - [ ] Ensure layouts adapt correctly (no horizontal scrolling).
-  - [ ] Check navigation responsiveness (hamburger menu or link wrapping).
-  - [ ] Verify readability of text and touch target sizes on mobile.
-  - [ ] Ensure images are responsive (using `next/image`).
-- [ ] **4.4: Consistent UI Elements**
-  - [ ] Review buttons, cards, links for consistent styling (rounded corners, padding, hover/focus states).
-  - [ ] Ensure a cohesive visual language.
+- [*] **4.1: Typography and Prose Refinement**
+  - [*] Review all `prose` styled content (blog posts, project details, static pages).
+  - [*] Fine-tune `tailwind.config.ts` typography settings for readability (font sizes, line heights, spacing, link styles).
+  - [*] Ensure code blocks within prose are styled well (consider `rehype-pretty-code` or similar for syntax highlighting if not already handled by `@tailwindcss/typography`'s defaults).
+- [*] **4.2: Dark Mode Implementation**
+  - [*] Install `next-themes`: `npm install next-themes`.
+  - [*] Create `site/src/components/ui/ThemeProvider.tsx`.
+  - [*] Wrap `RootLayout` children with `<ThemeProvider attribute="class" defaultTheme="system" enableSystem>`.
+  - [*] Create `site/src/components/ui/ThemeToggle.tsx` button to switch between light, dark, and system themes.
+  - [*] Add `ThemeToggle` button to the `Header.tsx` or another accessible location.
+  - [*] Verify `dark:` variants in Tailwind are working correctly across all components and prose.
+  - [*] Ensure `bg-subtle-dark` and `text-default-dark` (or your custom dark theme colors) are applied correctly.
+  - [*] Check prose dark mode styles (`dark:prose-invert`).
+- [*] **4.3: Responsive Design Polish**
+  - [*] Test the entire site on various screen sizes (desktop, tablet, mobile).
+  - [*] Ensure layouts adapt correctly (no horizontal scrolling).
+  - [*] Check navigation responsiveness (hamburger menu or link wrapping).
+  - [*] Verify readability of text and touch target sizes on mobile.
+  - [*] Ensure images are responsive (using `next/image`).
+- [*] **4.4: Consistent UI Elements**
+  - [*] Review buttons, cards, links for consistent styling (rounded corners, padding, hover/focus states).
+  - [*] Ensure a cohesive visual language.
 
 ---
 
