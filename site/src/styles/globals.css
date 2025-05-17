@@ -22,6 +22,14 @@
   --surface-background: #f9fafb; /* Gray 50 */
   --link-default: #2563eb; /* Blue 600 */
   --link-hover: #1d4ed8; /* Blue 700 */
+
+  --selection-background: rgba(
+    59,
+    130,
+    246,
+    0.3
+  ); /* Equivalent to blue-500 with 30% opacity */
+  --selection-text: inherit; /* Use the element's own text color by default */
 }
 
 .dark:root {
@@ -39,6 +47,14 @@
   --surface-background: #1f1f1f; /* Neutral 900 (Adjusted darker) */
   --link-default: #60a5fa; /* Blue 400 */
   --link-hover: #93c5fd; /* Blue 300 */
+
+  --selection-background: rgba(
+    96,
+    165,
+    250,
+    0.4
+  ); /* Equivalent to blue-400 with 40% opacity for dark mode */
+  --selection-text: inherit;
 }
 
 /* Register our CSS variables with Tailwind's theme system.
@@ -136,4 +152,16 @@ body {
                         Common values range from 65ch to 80ch.
                      */
   }
+}
+
+/* Custom Text Selection Styles */
+::selection {
+  background-color: var(--selection-background);
+  color: var(--selection-text);
+}
+
+/* Firefox requires a separate rule for `::-moz-selection` */
+::-moz-selection {
+  background-color: var(--selection-background);
+  color: var(--selection-text);
 }
