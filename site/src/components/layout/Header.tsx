@@ -1,10 +1,11 @@
 // site/src/components/layout/Header.tsx
 "use client";
 
-import React, { useState, useEffect } from "react"; // Import useState and useEffect
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import NavLink from "./NavLink";
-import { usePathname } from "next/navigation"; // Import usePathname to close menu on route change
+import { usePathname } from "next/navigation";
+import ThemeToggle from "@/components/ui/ThemeToggle"; // Import ThemeToggle
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -15,7 +16,6 @@ const navItems = [
   { href: "/about", label: "About" },
 ];
 
-// Icons for the mobile menu button
 const MenuIcon = () => (
   <svg
     className="h-6 w-6"
@@ -52,7 +52,6 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Close mobile menu on route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
@@ -61,13 +60,12 @@ const Header: React.FC = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Function to be called by NavLinks in the mobile menu to ensure it closes
   const handleMobileLinkClick = () => {
     setIsMobileMenuOpen(false);
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-page-background/75 backdrop-blur-md border-b border-surface-background">
+    <header className="sticky top-0 z-50 w-full bg-page-background/90 backdrop-blur-md border-b border-surface-background">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Site Title / Logo */}
@@ -80,17 +78,25 @@ const Header: React.FC = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex md:items-center md:space-x-1 lg:space-x-2">
-            {navItems.map((item) => (
-              <NavLink key={item.href} href={item.href}>
-                {item.label}
-              </NavLink>
-            ))}
-          </nav>
+          {/* Desktop Navigation & Theme Toggle */}
+          <div className="hidden md:flex items-center space-x-4">
+            {" "}
+            {/* Group desktop nav and toggle */}
+            <nav className="flex items-center space-x-1 lg:space-x-2">
+              {navItems.map((item) => (
+                <NavLink key={item.href} href={item.href}>
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
+            <ThemeToggle /> {/* Add ThemeToggle for desktop */}
+          </div>
 
-          {/* Mobile Navigation Button */}
-          <div className="md:hidden">
+          {/* Mobile Controls: Theme Toggle and Menu Button */}
+          <div className="md:hidden flex items-center space-x-2">
+            {" "}
+            {/* Group mobile controls */}
+            <ThemeToggle /> {/* Add ThemeToggle for mobile */}
             <button
               onClick={toggleMobileMenu}
               aria-label="Toggle navigation menu"
@@ -108,15 +114,11 @@ const Header: React.FC = () => {
         <div className="md:hidden absolute top-16 left-0 right-0 bg-page-background shadow-lg border-t border-surface-background">
           <nav className="flex flex-col space-y-1 px-2 pt-2 pb-3">
             {navItems.map((item) => (
-              // Wrap NavLink or add onClick to NavLink itself if it supports it
-              // For simplicity, we'll assume NavLink doesn't directly take onClick for this state management.
-              // So, we wrap it or modify NavLink if needed.
-              // For this implementation, let's make NavLink take an optional onClick.
               <NavLink
                 key={item.href}
                 href={item.href}
-                className="block !px-3 !py-2 !text-base" // Override NavLink's internal padding for mobile list
-                onClick={handleMobileLinkClick} // Add this to NavLink props or handle differently
+                className="block !px-3 !py-2 !text-base"
+                onClick={handleMobileLinkClick}
               >
                 {item.label}
               </NavLink>
