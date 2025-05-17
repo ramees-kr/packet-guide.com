@@ -1,0 +1,34 @@
+---
+title: "Log Analysis & Visualization Dashboard"
+date: "2024-09-15" # A different date for sorting
+description: "A web-based dashboard for parsing, analyzing, and visualizing server application logs, built with Python (Flask/Dash) and Elasticsearch."
+tags:
+  - Python
+  - Flask
+  - Plotly Dash
+  - Elasticsearch
+  - Data Visualization
+  - DevOps
+repoUrl: "https://github.com/yourusername/log-analyzer-example" # Replace with a sample repo
+# demoUrl: "" # Typically, a log dashboard might be internal
+---
+
+## Project Summary
+
+This project aimed to develop an internal tool for operations and development teams to easily ingest, search, and visualize application logs from various sources. The goal was to move away from manual log grepping and provide a more interactive and insightful way to troubleshoot issues and monitor application health.
+
+### Core Features:
+
+- **Log Ingestion Pipeline**: Scripts to collect logs from servers and forward them to an Elasticsearch cluster.
+- **Search & Filtering**: A web interface with powerful search capabilities (full-text, field-based) across indexed logs.
+- **Data Visualization**: Dynamic charts and graphs (e.g., error rates over time, request latency distributions, common event types) built with Plotly Dash.
+- **User Authentication**: Basic authentication to restrict access to the dashboard.
+
+### Technical Stack:
+
+- **Backend & Dashboard**: Python, with Flask for the web framework and Plotly Dash for interactive components.
+- **Data Storage & Search**: Elasticsearch for storing and indexing log data.
+- **Log Processing**: (Potentially) Logstash or custom Python scripts for parsing and enriching logs before indexing.
+- **Frontend**: HTML, CSS, and JavaScript as part of the Dash framework.
+
+This dashboard significantly improved the efficiency of log analysis and provided valuable, actionable insights that were previously difficult to obtain.

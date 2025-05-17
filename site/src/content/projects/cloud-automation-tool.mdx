@@ -1,0 +1,37 @@
+---
+title: "Cloud Resource Provisioner"
+date: "2024-12-01"
+description: "A CLI tool built with Python and Boto3 to automate the provisioning and management of AWS cloud resources."
+tags:
+  - Python
+  - AWS
+  - Boto3
+  - CLI
+  - Automation
+repoUrl: "https://github.com/yourusername/cloud-provisioner-example" # Replace with a sample repo
+# demoUrl: "" # No live demo for a CLI tool in this example
+---
+
+## Project Goal
+
+The Cloud Resource Provisioner is a command-line interface (CLI) tool designed to simplify and automate common AWS resource management tasks. It aims to reduce manual effort in the AWS console and provide a scriptable interface for infrastructure operations.
+
+### Core Functionality:
+
+- **EC2 Instance Management**: Launch, stop, terminate, and list EC2 instances based on predefined configurations or user input.
+- **S3 Bucket Operations**: Create, delete, and list S3 buckets. Synchronize local directories with S3.
+- **IAM Role/Policy (Basic)**: Attach predefined IAM policies to roles (future enhancement).
+- **Configuration-driven**: Uses YAML configuration files to define resource specifications.
+
+### Technical Details:
+
+- **Language**: Python 3.x
+- **Key Libraries**:
+  - `boto3`: AWS SDK for Python.
+  - `click`: For creating beautiful command-line interfaces.
+  - `PyYAML`: For parsing configuration files.
+- **Development Practices**:
+  - Unit tests with `pytest`.
+  - Linting with `flake8` and formatting with `black`.
+
+This tool was developed to address repetitive tasks in a development environment and serves as a practical example of using Python for cloud automation.

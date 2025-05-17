@@ -100,52 +100,52 @@ The following phases outline the development work required to build the `packet-
 
 **Goal:** Implement MDX/Markdown processing for blog posts, create blog listing page, and individual blog post pages. This phase is critical for enabling the simplified publishing workflow.
 
-- [ ] **1.1: MDX/Content Processing Setup**
-  - [ ] Install necessary packages: `gray-matter`, `remark`, `remark-html`, `reading-time`. (Consider `next-mdx-remote` or a similar bundler for more advanced MDX features if needed).
-  - [ ] Configure `site/next.config.mjs` for MDX support (using `@next/mdx` plugin or equivalent).
-    - [ ] Add `pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx']`.
-    - [ ] Configure `remarkPlugins` and `rehypePlugins` if needed (e.g., `rehypeSlug`, `rehypeAutolinkHeadings` - can be added later).
-  - [ ] Create `site/src/mdx-components.tsx` to allow custom components in MDX (can be basic for now).
-- [ ] **1.2: Content Fetching Logic (`lib/content.ts` or `lib/mdx.ts`)**
-  - [ ] Create the content utility file (e.g., `site/src/lib/content.ts`).
-  - [ ] Implement `getPostData(slug: string)` function:
-    - [ ] Reads individual `.md`/`.mdx` file from `site/src/content/posts/`.
-    - [ ] Uses `gray-matter` to parse frontmatter (title, date, excerpt, author, tags etc.).
-    - [ ] Processes Markdown/MDX content (e.g., using `remark` and `remark-html`, or preparing for MDX component rendering).
-    - [ ] Calculates `readingTime`.
-    - [ ] Returns `slug`, frontmatter, content (HTML or MDX source), and readingTime.
-  - [ ] Implement `getSortedPostsData()` function:
-    - [ ] Reads all `.md`/`.mdx` files from `site/src/content/posts/`.
-    - [ ] Parses frontmatter for each.
-    - [ ] Sorts posts by date (newest first).
-    - [ ] Returns an array of post metadata (slug, title, date, excerpt, etc.).
-- [ ] **1.3: Sample Blog Content**
-  - [ ] Create 2-3 sample blog posts in `site/src/content/posts/` (e.g., `my-first-post.mdx`, `another-update.md`).
-  - [ ] Include frontmatter (title, date, excerpt, author, tags).
-  - [ ] Add some Markdown content.
-- [ ] **1.4: Blog Index Page (`/blog`)**
-  - [ ] Create `site/src/app/blog/page.tsx`.
-  - [ ] Use `getSortedPostsData()` to fetch all posts.
-  - [ ] Create `site/src/components/ui/BlogCard.tsx`:
-    - [ ] Props: `post` (title, date, excerpt, slug, tags, readingTime).
-    - [ ] Displays post information cleanly.
-    - [ ] Links to `/blog/[slug]`.
-    - [ ] Minimalist, paper-like card styling.
-  - [ ] List `BlogCard` components on the blog index page.
-  - [ ] Add a title like "Blog" or "Articles".
-- [ ] **1.5: Blog Post Page (`/blog/[slug]`)**
-  - [ ] Create `site/src/app/blog/[slug]/page.tsx`.
-  - [ ] Implement `generateStaticParams()` to pre-render blog posts using slugs from `getSortedPostsData()`.
-  - [ ] Implement `generateMetadata({ params })` to dynamically set page title and description from post frontmatter.
-  - [ ] Fetch individual post data using `getPostData(params.slug)`.
-  - [ ] Display post title, date, author, reading time.
-  - [ ] Render post content (e.g., using MDX components or `dangerouslySetInnerHTML` if using HTML from `remark-html`).
-  - [ ] Apply `prose dark:prose-invert max-w-readable mx-auto` classes to the content container for typography styling.
-- [ ] **1.6: Verify Blog Functionality**
-  - [ ] Check blog index page: lists posts, links work.
-  - [ ] Check individual blog post pages: content renders correctly, metadata is set.
-  - [ ] Ensure prose styles are applied.
-  - [ ] Test adding a new blog post file and ensure it appears after a rebuild (simulating the simplified workflow).
+- [x] **1.1: MDX/Content Processing Setup**
+  - [x] Install necessary packages: `gray-matter`, `remark`, `remark-html`, `reading-time`. (Consider `next-mdx-remote` or a similar bundler for more advanced MDX features if needed).
+  - [x] Configure `site/next.config.mjs` for MDX support (using `@next/mdx` plugin or equivalent).
+    - [x] Add `pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx']`.
+    - [x] Configure `remarkPlugins` and `rehypePlugins` if needed (e.g., `rehypeSlug`, `rehypeAutolinkHeadings` - can be added later).
+  - [x] Create `site/src/mdx-components.tsx` to allow custom components in MDX (can be basic for now).
+- [x] **1.2: Content Fetching Logic (`lib/content.ts` or `lib/mdx.ts`)**
+  - [x] Create the content utility file (e.g., `site/src/lib/content.ts`).
+  - [x] Implement `getPostData(slug: string)` function:
+    - [x] Reads individual `.md`/`.mdx` file from `site/src/content/posts/`.
+    - [x] Uses `gray-matter` to parse frontmatter (title, date, excerpt, author, tags etc.).
+    - [x] Processes Markdown/MDX content (e.g., using `remark` and `remark-html`, or preparing for MDX component rendering).
+    - [x] Calculates `readingTime`.
+    - [x] Returns `slug`, frontmatter, content (HTML or MDX source), and readingTime.
+  - [x] Implement `getSortedPostsData()` function:
+    - [x] Reads all `.md`/`.mdx` files from `site/src/content/posts/`.
+    - [x] Parses frontmatter for each.
+    - [x] Sorts posts by date (newest first).
+    - [x] Returns an array of post metadata (slug, title, date, excerpt, etc.).
+- [x] **1.3: Sample Blog Content**
+  - [x] Create 2-3 sample blog posts in `site/src/content/posts/` (e.g., `my-first-post.mdx`, `another-update.md`).
+  - [x] Include frontmatter (title, date, excerpt, author, tags).
+  - [x] Add some Markdown content.
+- [x] **1.4: Blog Index Page (`/blog`)**
+  - [x] Create `site/src/app/blog/page.tsx`.
+  - [x] Use `getSortedPostsData()` to fetch all posts.
+  - [x] Create `site/src/components/ui/BlogCard.tsx`:
+    - [x] Props: `post` (title, date, excerpt, slug, tags, readingTime).
+    - [x] Displays post information cleanly.
+    - [x] Links to `/blog/[slug]`.
+    - [x] Minimalist, paper-like card styling.
+  - [x] List `BlogCard` components on the blog index page.
+  - [x] Add a title like "Blog" or "Articles".
+- [x] **1.5: Blog Post Page (`/blog/[slug]`)**
+  - [x] Create `site/src/app/blog/[slug]/page.tsx`.
+  - [x] Implement `generateStaticParams()` to pre-render blog posts using slugs from `getSortedPostsData()`.
+  - [x] Implement `generateMetadata({ params })` to dynamically set page title and description from post frontmatter.
+  - [x] Fetch individual post data using `getPostData(params.slug)`.
+  - [x] Display post title, date, author, reading time.
+  - [x] Render post content (e.g., using MDX components or `dangerouslySetInnerHTML` if using HTML from `remark-html`).
+  - [x] Apply `prose dark:prose-invert max-w-readable mx-auto` classes to the content container for typography styling.
+- [x] **1.6: Verify Blog Functionality**
+  - [x] Check blog index page: lists posts, links work.
+  - [x] Check individual blog post pages: content renders correctly, metadata is set.
+  - [x] Ensure prose styles are applied.
+  - [x] Test adding a new blog post file and ensure it appears after a rebuild (simulating the simplified workflow).
 
 ---
 
@@ -153,45 +153,45 @@ The following phases outline the development work required to build the `packet-
 
 **Goal:** Load project documentation (READMEs or dedicated .md files) and display them on project listing and detail pages.
 
-- [ ] **2.1: Project Content Strategy**
-  - [ ] Decision: Project content will be in `site/src/content/projects/[PROJECT_SLUG].md` (or `.mdx`).
-  - [ ] Define frontmatter for projects (title, description, tags, repoUrl, demoUrl, date/lastUpdated).
-- [ ] **2.2: Project Fetching Logic (`lib/content.ts`)**
-  - [ ] Add `getProjectData(slug: string)` function to `site/src/lib/content.ts`:
-    - [ ] Reads individual project `.md`/`.mdx` file from `site/src/content/projects/`.
-    - [ ] Parses frontmatter.
-    - [ ] Converts Markdown to HTML or prepares MDX.
-    - [ ] Returns `slug`, frontmatter, content.
-  - [ ] Add `getSortedProjectsData()` function:
-    - [ ] Reads all project files.
-    - [ ] Parses frontmatter.
-    - [ ] Sorts projects (e.g., by date or title).
-    - [ ] Returns an array of project metadata.
-- [ ] **2.3: Sample Project Content**
-  - [ ] Create 2-3 sample project files in `site/src/content/projects/` (e.g., `my-cool-app.md`, `another-tool.mdx`).
-  - [ ] Include relevant frontmatter.
-  - [ ] Add some Markdown content describing the projects.
-- [ ] **2.4: Projects Index Page (`/projects`)**
-  - [ ] Create `site/src/app/projects/page.tsx`.
-  - [ ] Use `getSortedProjectsData()` to fetch all projects.
-  - [ ] Create `site/src/components/ui/ProjectCard.tsx`:
-    - [ ] Props: `project` (title, description, slug, tags, repoUrl, demoUrl).
-    - [ ] Displays project information.
-    - [ ] Links to `/projects/[slug]`.
-    - [ ] Links to repository and demo if available.
-    - [ ] Minimalist card styling.
-  - [ ] List `ProjectCard` components on the projects index page.
-  - [ ] Add a title like "Projects".
-- [ ] **2.5: Project Detail Page (`/projects/[slug]`)**
-  - [ ] Create `site/src/app/projects/[slug]/page.tsx`.
-  - [ ] Implement `generateStaticParams()` for projects.
-  - [ ] Implement `generateMetadata({ params })` for project titles.
-  - [ ] Fetch project data using `getProjectData(params.slug)`.
-  - [ ] Display project title, description, links.
-  - [ ] Render project content (apply `prose` styles).
-- [ ] **2.6: Verify Projects Functionality**
-  - [ ] Check projects index page: lists projects, links work.
-  - [ ] Check individual project pages: content renders, metadata is set.
+- [x] **2.1: Project Content Strategy**
+  - [x] Decision: Project content will be in `site/src/content/projects/[PROJECT_SLUG].md` (or `.mdx`).
+  - [x] Define frontmatter for projects (title, description, tags, repoUrl, demoUrl, date/lastUpdated).
+- [x] **2.2: Project Fetching Logic (`lib/content.ts`)**
+  - [x] Add `getProjectData(slug: string)` function to `site/src/lib/content.ts`:
+    - [x] Reads individual project `.md`/`.mdx` file from `site/src/content/projects/`.
+    - [x] Parses frontmatter.
+    - [x] Converts Markdown to HTML or prepares MDX.
+    - [x] Returns `slug`, frontmatter, content.
+  - [x] Add `getSortedProjectsData()` function:
+    - [x] Reads all project files.
+    - [x] Parses frontmatter.
+    - [x] Sorts projects (e.g., by date or title).
+    - [x] Returns an array of project metadata.
+- [x] **2.3: Sample Project Content**
+  - [x] Create 2-3 sample project files in `site/src/content/projects/` (e.g., `my-cool-app.md`, `another-tool.mdx`).
+  - [x] Include relevant frontmatter.
+  - [x] Add some Markdown content describing the projects.
+- [x] **2.4: Projects Index Page (`/projects`)**
+  - [x] Create `site/src/app/projects/page.tsx`.
+  - [x] Use `getSortedProjectsData()` to fetch all projects.
+  - [x] Create `site/src/components/ui/ProjectCard.tsx`:
+    - [x] Props: `project` (title, description, slug, tags, repoUrl, demoUrl).
+    - [x] Displays project information.
+    - [x] Links to `/projects/[slug]`.
+    - [x] Links to repository and demo if available.
+    - [x] Minimalist card styling.
+  - [x] List `ProjectCard` components on the projects index page.
+  - [x] Add a title like "Projects".
+- [x] **2.5: Project Detail Page (`/projects/[slug]`)**
+  - [x] Create `site/src/app/projects/[slug]/page.tsx`.
+  - [x] Implement `generateStaticParams()` for projects.
+  - [x] Implement `generateMetadata({ params })` for project titles.
+  - [x] Fetch project data using `getProjectData(params.slug)`.
+  - [x] Display project title, description, links.
+  - [x] Render project content (apply `prose` styles).
+- [x] **2.6: Verify Projects Functionality**
+  - [x] Check projects index page: lists projects, links work.
+  - [x] Check individual project pages: content renders, metadata is set.
 
 ---
 
