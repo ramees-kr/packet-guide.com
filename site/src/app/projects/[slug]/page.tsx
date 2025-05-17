@@ -5,6 +5,10 @@ import { getAllProjectSlugs, getProjectData } from "@/lib/content";
 import { mdxCustomComponents } from "@/mdx-components";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
+import rehypePrettyCode from "rehype-pretty-code";
+import type { Options as RehypePrettyCodeOptions } from "rehype-pretty-code";
+// Optional: For typing nodes in rehype-pretty-code callbacks
+// import type { LineElement, CharsElement } from 'rehype-pretty-code';
 
 // Optional: Icons for links, similar to ProjectCard (or use a shared icon component later)
 const ExternalLinkIcon = () => (
@@ -43,7 +47,6 @@ const RepoIcon = () => (
 
 type Props = {
   params: Promise<{
-    // params is a Promise in Next.js 15+ App Router
     slug: string;
   }>;
 };
@@ -67,12 +70,11 @@ export async function generateMetadata(
   return {
     title: `${project.title} | Projects - Packet Guide`,
     description: project.description,
-    // Add other metadata later if needed
   };
 }
 
 export async function generateStaticParams() {
-  const slugs = getAllProjectSlugs(); // Using the new function for projects
+  const slugs = getAllProjectSlugs();
   return slugs.map((item) => ({
     slug: item.slug,
   }));
@@ -85,23 +87,49 @@ export default async function ProjectDetailPage({
   const project = await getProjectData(params.slug);
 
   if (!project) {
-    notFound(); // Renders the not-found.tsx or default 404 page
+    notFound();
   }
 
   const components = mdxCustomComponents;
+
+  // Options for rehype-pretty-code
+  const prettyCodeOptions: RehypePrettyCodeOptions = {
+    theme: {
+      light: "github-light", // Or your preferred light theme
+      dark: "github-dark", // Or your preferred dark theme
+    },
+    onVisitLine(
+      node /*: LineElement - add type if imported e.g. import {type LineElement} from 'rehype-pretty-code' */
+    ) {
+      if (node.children.length === 0) {
+        node.children = [{ type: "text", value: " " }];
+      }
+    },
+    onVisitHighlightedLine(node /*: LineElement */) {
+      if (!node.properties) node.properties = {};
+      node.properties.className = Array.isArray(node.properties.className)
+        ? [...node.properties.className, "highlighted"]
+        : ["highlighted"];
+    },
+    onVisitHighlightedChars(node /*: CharsElement */) {
+      if (!node.properties) node.properties = {};
+      node.properties.className = ["highlighted-chars"];
+    },
+    keepBackground: true,
+  };
+
+  // Updated mdxOptions to include rehype-pretty-code
   const mdxOptions = {
-    // Define MDX options for plugins
-    remarkPlugins: [],
-    rehypePlugins: [],
+    remarkPlugins: [
+      // Add any remark plugins here, e.g., remarkGfm if you install it
+    ],
+    rehypePlugins: [() => rehypePrettyCode(prettyCodeOptions)],
   };
 
   return (
     <article className="py-12">
       <div className="container mx-auto px-4">
-        {/* Project Header */}
         <header className="mb-8 pb-4 border-b border-surface-background text-center">
-          {" "}
-          {/* Added text-center */}
           <h1 className="text-4xl md:text-5xl font-bold text-text-default mb-3">
             {project.title}
           </h1>
@@ -116,8 +144,6 @@ export default async function ProjectDetailPage({
           </div>
           {project.tags && project.tags.length > 0 && (
             <div className="mb-4 flex flex-wrap justify-center gap-2">
-              {" "}
-              {/* Added justify-center */}
               {project.tags.map((tag) => (
                 <span
                   key={tag}
@@ -129,8 +155,6 @@ export default async function ProjectDetailPage({
             </div>
           )}
           <div className="flex flex-wrap justify-center gap-4">
-            {" "}
-            {/* Added justify-center */}
             {project.repoUrl && (
               <a
                 href={project.repoUrl}
@@ -154,11 +178,10 @@ export default async function ProjectDetailPage({
           </div>
         </header>
 
-        {/* Project Content - MDX */}
         <div className="prose dark:prose-invert max-w-readable mx-auto">
           <MDXRemote
-            source={project.source} // Raw MDX string
-            options={{ mdxOptions }}
+            source={project.source}
+            options={{ mdxOptions }} // Pass the updated mdxOptions
             components={components}
           />
         </div>

@@ -11,7 +11,6 @@ import type { Options as RehypePrettyCodeOptions } from "rehype-pretty-code";
 // Update Props type: params is now a Promise
 type Props = {
   params: Promise<{
-    // <-- Changed to Promise
     slug: string;
   }>;
 };

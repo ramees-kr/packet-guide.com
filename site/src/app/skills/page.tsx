@@ -5,6 +5,12 @@ import { mdxCustomComponents } from "@/mdx-components";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
+// Imports for syntax highlighting
+import rehypePrettyCode from "rehype-pretty-code";
+import type { Options as RehypePrettyCodeOptions } from "rehype-pretty-code";
+// Optional: For typing nodes in rehype-pretty-code callbacks
+// import type { LineElement, CharsElement } from 'rehype-pretty-code';
+
 export const metadata: Metadata = {
   title: "Skills | Packet Guide",
   description: "Overview of technical skills and expertise for Packet Guide.",
@@ -18,9 +24,34 @@ export default async function SkillsPage() {
   }
 
   const components = mdxCustomComponents;
+
+  // Options for rehype-pretty-code
+  const prettyCodeOptions: RehypePrettyCodeOptions = {
+    theme: {
+      light: "github-light",
+      dark: "github-dark",
+    },
+    onVisitLine(node /*: LineElement */) {
+      if (node.children.length === 0) {
+        node.children = [{ type: "text", value: " " }];
+      }
+    },
+    onVisitHighlightedLine(node /*: LineElement */) {
+      if (!node.properties) node.properties = {};
+      node.properties.className = Array.isArray(node.properties.className)
+        ? [...node.properties.className, "highlighted"]
+        : ["highlighted"];
+    },
+    onVisitHighlightedChars(node /*: CharsElement */) {
+      if (!node.properties) node.properties = {};
+      node.properties.className = ["highlighted-chars"];
+    },
+    keepBackground: true,
+  };
+
   const mdxOptions = {
     remarkPlugins: [],
-    rehypePlugins: [],
+    rehypePlugins: [() => rehypePrettyCode(prettyCodeOptions)],
   };
 
   return (
