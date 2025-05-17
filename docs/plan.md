@@ -52,47 +52,47 @@ The following phases outline the development work required to build the `packet-
 
 **Goal:** Initialize the project, set up Tailwind CSS, create the basic layout structure, and ensure the development environment is operational.
 
-- [ ] **0.1: Project Initialization & Structure**
-  - [ ] Confirm Next.js 14 project created with TypeScript, ESLint, Tailwind, `src/` directory, App Router, and `@/*` import alias.
-  - [ ] Ensure all project code is within a `site/` folder in the repository.
-  - [ ] Review and confirm the target directory structure (as outlined in `prompt.md`).
-- [ ] **0.2: Tailwind CSS Configuration**
-  - [ ] Install `@tailwindcss/typography`.
-  - [ ] Configure `site/tailwind.config.ts`:
-    - [ ] Add `src/content/**/*.{md,mdx}` to `content` array.
-    - [ ] Set up `theme.extend.typography` with custom prose styles (colors, maxWidth, lineHeight).
-    - [ ] (Optional) Define a custom font family (e.g., Inter) via CSS variable.
-    - [ ] Define `subtle` background colors for light/dark modes.
-    - [ ] Define `default` text colors for light/dark modes.
-    - [ ] Enable `darkMode: 'class'`.
-    - [ ] Add `@tailwindcss/typography` to plugins.
-  - [ ] Configure `site/postcss.config.js` (usually default is fine).
-- [ ] **0.3: Global Styles & Font**
-  - [ ] Update `site/src/styles/globals.css`:
-    - [ ] Import Tailwind base, components, utilities.
-    - [ ] Define base body styles (background, text color, antialiasing, font).
-    - [ ] (Optional) Add subtle paper-like background texture.
-    - [ ] Define consistent focus styles (`*:focus-visible`).
-    - [ ] Define `.max-w-readable` utility class.
-  - [ ] If using a custom web font (e.g., Inter), import it in `site/src/app/layout.tsx` (e.g., from `next/font/google`).
-- [ ] **0.4: Basic Layout Components**
-  - [ ] Create `site/src/components/layout/Header.tsx` (placeholder content).
-  - [ ] Create `site/src/components/layout/Footer.tsx` (placeholder content, e.g., copyright).
-  - [ ] Create `site/src/components/layout/NavLink.tsx` (for navigation links, handling active state later).
-- [ ] **0.5: Root Layout (`layout.tsx`)**
-  - [ ] Set up `site/src/app/layout.tsx`:
-    - [ ] Import global CSS.
-    - [ ] Import and apply custom font if chosen.
-    - [ ] Set `lang="en"` and `suppressHydrationWarning` on `<html>`.
-    - [ ] Apply base `<body>` classes (font, background, text colors).
-    - [ ] Implement basic structure: `div` (flex, min-h-screen) > `Header`, `main` (flex-grow, container, padding), `Footer`.
-    - [ ] Add basic `metadata` (site title, description).
-- [ ] **0.6: Home Page (`page.tsx`)**
-  - [ ] Create a simple `site/src/app/page.tsx` with a placeholder heading (e.g., "Welcome to Packet Guide").
-- [ ] **0.7: Verify Setup**
-  - [ ] Run `npm run dev` (or `yarn dev` / `pnpm dev`).
-  - [ ] Check if the home page loads with basic layout and styling.
-  - [ ] Verify Tailwind utility classes and typography plugin are working.
+- [ x] **0.1: Project Initialization & Structure**
+  - [x] Confirm Next.js 14 project created with TypeScript, ESLint, Tailwind, `src/` directory, App Router, and `@/*` import alias.
+  - [x] Ensure all project code is within a `site/` folder in the repository.
+  - [x] Review and confirm the target directory structure (as outlined in `prompt.md`).
+- [x] **0.2: Tailwind CSS Configuration**
+  - [x] Install `@tailwindcss/typography`.
+  - [x] Configure `site/tailwind.config.ts`:
+    - [x] Add `src/content/**/*.{md,mdx}` to `content` array.
+    - [x] Set up `theme.extend.typography` with custom prose styles (colors, maxWidth, lineHeight).
+    - [x] (Optional) Define a custom font family (e.g., Inter) via CSS variable.
+    - [x] Define `subtle` background colors for light/dark modes.
+    - [x] Define `default` text colors for light/dark modes.
+    - [x] Enable `darkMode: 'class'`.
+    - [x] Add `@tailwindcss/typography` to plugins.
+  - [x] Configure `site/postcss.config.js` (usually default is fine).
+- [x] **0.3: Global Styles & Font**
+  - [x] Update `site/src/styles/globals.css`:
+    - [x] Import Tailwind base, components, utilities.
+    - [x] Define base body styles (background, text color, antialiasing, font).
+    - [x] (Optional) Add subtle paper-like background texture.
+    - [x] Define consistent focus styles (`*:focus-visible`).
+    - [x] Define `.max-w-readable` utility class.
+  - [x] If using a custom web font (e.g., Inter), import it in `site/src/app/layout.tsx` (e.g., from `next/font/google`).
+- [x] **0.4: Basic Layout Components**
+  - [x] Create `site/src/components/layout/Header.tsx` (placeholder content).
+  - [x] Create `site/src/components/layout/Footer.tsx` (placeholder content, e.g., copyright).
+  - [x] Create `site/src/components/layout/NavLink.tsx` (for navigation links, handling active state later).
+- [x] **0.5: Root Layout (`layout.tsx`)**
+  - [x] Set up `site/src/app/layout.tsx`:
+    - [x] Import global CSS.
+    - [x] Import and apply custom font if chosen.
+    - [x] Set `lang="en"` and `suppressHydrationWarning` on `<html>`.
+    - [x] Apply base `<body>` classes (font, background, text colors).
+    - [x] Implement basic structure: `div` (flex, min-h-screen) > `Header`, `main` (flex-grow, container, padding), `Footer`.
+    - [x] Add basic `metadata` (site title, description).
+- [x] **0.6: Home Page (`page.tsx`)**
+  - [x] Create a simple `site/src/app/page.tsx` with a placeholder heading (e.g., "Welcome to Packet Guide").
+- [x] **0.7: Verify Setup**
+  - [x] Run `npm run dev` (or `yarn dev` / `pnpm dev`).
+  - [x] Check if the home page loads with basic layout and styling.
+  - [x] Verify Tailwind utility classes and typography plugin are working.
 
 ---
 
