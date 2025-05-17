@@ -94,7 +94,7 @@
   ); /* Example: use link color for quote border */
   --tw-prose-captions: var(--text-subtle);
   --tw-prose-code: var(--text-default); /* Inline code text */
-  --tw-prose-pre-code: var(--text-default); /* Code within <pre> blocks */
+  --tw-prose-pre-code: inherit; /* Code within <pre> blocks */
   --tw-prose-pre-bg: var(--surface-background); /* Background of <pre> blocks */
   --tw-prose-th-borders: var(--text-subtle);
   --tw-prose-td-borders: var(--surface-background);
@@ -118,10 +118,13 @@
   --tw-prose-invert-quote-borders: var(--link-default);
   --tw-prose-invert-captions: var(--text-subtle);
   --tw-prose-invert-code: var(--text-default);
-  --tw-prose-invert-pre-code: var(--text-default);
+  --tw-prose-invert-pre-code: inherit;
   --tw-prose-invert-pre-bg: var(--surface-background);
   --tw-prose-invert-th-borders: var(--text-subtle);
   --tw-prose-invert-td-borders: var(--surface-background);
+
+  --tw-prose-pre-bg: transparent;
+  --tw-prose-invert-pre-bg: transparent;
 }
 
 /* Base body styles */
@@ -165,3 +168,77 @@ body {
   background-color: var(--selection-background);
   color: var(--selection-text);
 }
+
+/* Styles for rehype-pretty-code features */
+/* For highlighted lines */
+.prose pre .line.highlighted, /* If line numbers are off */
+.prose pre code .line.highlighted /* If line numbers are on and spans wrap lines */ {
+  background-color: rgba(
+    255,
+    220,
+    100,
+    0.15
+  ); /* Example: subtle yellow highlight */
+  display: block; /* Ensure it takes full width */
+  margin: 0 -1.5rem; /* Adjust to align with prose padding if pre has padding */
+  padding: 0 1.5rem; /* Adjust to align with prose padding */
+}
+.dark .prose pre .line.highlighted,
+.dark .prose pre code .line.highlighted {
+  background-color: rgba(
+    255,
+    230,
+    150,
+    0.1
+  ); /* Dark mode subtle yellow highlight */
+}
+
+/* For highlighted characters (e.g., a specific word) */
+.prose pre .highlighted-chars,
+.prose pre code .highlighted-chars {
+  background-color: rgba(100, 200, 255, 0.2);
+  border-radius: 2px;
+  padding: 0.1em 0.2em;
+}
+.dark .prose pre .highlighted-chars,
+.dark .prose pre code .highlighted-chars {
+  background-color: rgba(100, 180, 255, 0.25);
+}
+
+/* --- Styles to activate rehype-pretty-code CSS variables for dual themes --- */
+
+/* Apply default Shiki theme background and foreground to the <pre> block */
+/* The <pre> tag gets style="--shiki-light: fg; --shiki-dark: fg; --shiki-light-bg: bg; --shiki-dark-bg: bg;" */
+.prose pre[data-theme~="github-light"] {
+  background-color: var(
+    --shiki-light-bg
+  ) !important; /* Use Shiki light background */
+  color: var(--shiki-light) !important; /* Default Shiki light foreground */
+}
+
+/* When html has .dark class, apply Shiki dark theme background and foreground */
+html.dark .prose pre[data-theme~="github-dark"] {
+  background-color: var(
+    --shiki-dark-bg
+  ) !important; /* Use Shiki dark background */
+  color: var(--shiki-dark) !important; /* Default Shiki dark foreground */
+}
+
+/* Apply token colors using the CSS variables defined on each span */
+/* Each token span gets style="--shiki-light: colorA; --shiki-dark: colorB;" */
+.prose pre[data-theme~="github-light"] code span {
+  color: var(--shiki-light) !important;
+}
+
+html.dark .prose pre[data-theme~="github-dark"] code span {
+  color: var(--shiki-dark) !important;
+}
+
+/*
+  Note on !important:
+  We use !important here to ensure these Shiki-driven styles override any potentially
+  conflicting styles from @tailwindcss/typography's default prose settings for code blocks,
+  especially for color and background-color.
+  Your existing `--tw-prose-pre-bg: transparent;` helps, but explicit overrides here ensure
+  the Shiki variables are dominant for the code block's appearance.
+*/

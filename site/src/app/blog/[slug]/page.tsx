@@ -5,7 +5,8 @@ import { getAllPostSlugs, getPostData } from "@/lib/content";
 import { mdxCustomComponents } from "@/mdx-components";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
-// import remarkGfm from 'remark-gfm'; // Example plugin
+import rehypePrettyCode from "rehype-pretty-code"; // Import the plugin
+import type { Options as RehypePrettyCodeOptions } from "rehype-pretty-code";
 
 // Update Props type: params is now a Promise
 type Props = {
@@ -57,8 +58,8 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPostPage({ params: paramsPromise }: Props) {
-  // Rename to paramsPromise
-  const params = await paramsPromise; // Await the params promise
+  // Assuming Props is defined as before
+  const params = await paramsPromise;
   const post = await getPostData(params.slug);
 
   if (!post) {
@@ -67,11 +68,37 @@ export default async function BlogPostPage({ params: paramsPromise }: Props) {
 
   const components = mdxCustomComponents;
 
+  // Options for rehype-pretty-code
+  const prettyCodeOptions: RehypePrettyCodeOptions = {
+    theme: {
+      light: "github-light", // Or your chosen light theme
+      dark: "github-dark", // Or your chosen dark theme
+    },
+    // Keep your onVisitLine, onVisitHighlightedLine, onVisitHighlightedChars callbacks
+    onVisitLine(node /*: LineElement */) {
+      if (node.children.length === 0) {
+        node.children = [{ type: "text", value: " " }];
+      }
+    },
+    onVisitHighlightedLine(node /*: LineElement */) {
+      if (!node.properties) node.properties = {};
+      node.properties.className = Array.isArray(node.properties.className)
+        ? [...node.properties.className, "highlighted"]
+        : ["highlighted"];
+    },
+    onVisitHighlightedChars(node /*: CharsElement */) {
+      if (!node.properties) node.properties = {};
+      node.properties.className = ["highlighted-chars"];
+    },
+    keepBackground: true, // Default, good for this approach
+  };
+
+  // Updated mdxOptions to include rehype-pretty-code
   const mdxOptions = {
     remarkPlugins: [
       // remarkGfm,
     ],
-    rehypePlugins: [],
+    rehypePlugins: [() => rehypePrettyCode(prettyCodeOptions)],
   };
 
   return (
@@ -117,7 +144,7 @@ export default async function BlogPostPage({ params: paramsPromise }: Props) {
         <div className="prose dark:prose-invert max-w-readable mx-auto">
           <MDXRemote
             source={post.source}
-            options={{ mdxOptions }}
+            options={{ mdxOptions }} // Pass the updated mdxOptions
             components={components}
           />
         </div>
