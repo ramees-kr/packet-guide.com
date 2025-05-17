@@ -1,0 +1,244 @@
+/* Import base Tailwind styles and load the typography plugin */
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Enable class-based dark mode. Add/remove 'dark' class on <html> or <body> to toggle. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Define base CSS variables for color tokens.
+  These will be swapped based on the .dark class.
+*/
+:root {
+  /* Light Mode Values */
+  --page-bg-val: 255 255 255; /* RGB for potential use with opacity */
+  --text-default-val: 23 23 23;
+  --text-subtle-val: 82 82 82;
+  --surface-bg-val: 249 250 251; /* For cards, etc. (gray-50 equivalent) */
+
+  /* Direct hex values for easier use */
+  --page-background: #ffffff;
+  --text-default: #171717; /* Neutral 900 */
+  --text-subtle: #525252; /* Neutral 600 */
+  --surface-background: #f9fafb; /* Gray 50 */
+  --link-default: #2563eb; /* Blue 600 */
+  --link-hover: #1d4ed8; /* Blue 700 */
+
+  --selection-background: rgba(
+    59,
+    130,
+    246,
+    0.3
+  ); /* Equivalent to blue-500 with 30% opacity */
+  --selection-text: inherit; /* Use the element's own text color by default */
+}
+
+.dark:root {
+  /* When .dark class is present */
+  /* Dark Mode Values */
+  --page-bg-val: 10 10 10;
+  --text-default-val: 237 237 237;
+  --text-subtle-val: 163 163 163;
+  --surface-bg-val: 31 31 31; /* ~Neutral 800/900 adjusted */
+
+  /* Direct hex values */
+  --page-background: #0a0a0a; /* Neutral 950 */
+  --text-default: #ededed; /* Neutral 100 */
+  --text-subtle: #a3a3a3; /* Neutral 400 */
+  --surface-background: #1f1f1f; /* Neutral 900 (Adjusted darker) */
+  --link-default: #60a5fa; /* Blue 400 */
+  --link-hover: #93c5fd; /* Blue 300 */
+
+  --selection-background: rgba(
+    96,
+    165,
+    250,
+    0.4
+  ); /* Equivalent to blue-400 with 40% opacity for dark mode */
+  --selection-text: inherit;
+}
+
+/* Register our CSS variables with Tailwind's theme system.
+  This allows using theme('colors.page-background') or classes like bg-page-background.
+  Also, override typography plugin variables here.
+*/
+@theme {
+  /* Define color tokens for Tailwind */
+  --color-page-background: var(--page-background);
+  --color-text-default: var(--text-default);
+  --color-text-subtle: var(--text-subtle);
+  --color-surface-background: var(--surface-background);
+  --color-link-default: var(--link-default);
+  --color-link-hover: var(--link-hover);
+
+  /* Define font families (assumes --font-geist-sans & --font-geist-mono are loaded, e.g., via next/font in layout.tsx) */
+  --font-sans: var(--font-inter); /* Use Inter for sans-serif */
+  --font-mono: var(--font-fira-code); /* Use Fira Code for monospace */
+
+  /*
+    Customize @tailwindcss/typography plugin variables.
+    These variables are used by the 'prose' classes.
+    We tie them to our theme's CSS variables.
+  */
+  /* Light Prose Theme Variables */
+  --tw-prose-body: var(--text-default);
+  --tw-prose-headings: var(--text-default);
+  --tw-prose-lead: var(--text-subtle);
+  --tw-prose-links: var(--link-default);
+  --tw-prose-bold: var(--text-default);
+  --tw-prose-counters: var(--text-subtle);
+  --tw-prose-bullets: var(--text-subtle);
+  --tw-prose-hr: var(--surface-background);
+  --tw-prose-quotes: var(--text-default);
+  --tw-prose-quote-borders: var(
+    --link-default
+  ); /* Example: use link color for quote border */
+  --tw-prose-captions: var(--text-subtle);
+  --tw-prose-code: var(--text-default); /* Inline code text */
+  --tw-prose-pre-code: inherit; /* Code within <pre> blocks */
+  --tw-prose-pre-bg: var(--surface-background); /* Background of <pre> blocks */
+  --tw-prose-th-borders: var(--text-subtle);
+  --tw-prose-td-borders: var(--surface-background);
+  /* For a more paper-like feel for code blocks in light mode, you might use a slightly different bg */
+  /* --tw-prose-pre-bg: #f3f4f6; /* gray-100 */
+
+  /* Dark Prose Theme Variables (for 'prose-invert' class) */
+  --tw-prose-invert-body: var(
+    --text-default
+  ); /* text-default is already dark-mode aware */
+  --tw-prose-invert-headings: var(--text-default);
+  --tw-prose-invert-lead: var(--text-subtle);
+  --tw-prose-invert-links: var(
+    --link-default
+  ); /* link-default is already dark-mode aware */
+  --tw-prose-invert-bold: var(--text-default);
+  --tw-prose-invert-counters: var(--text-subtle);
+  --tw-prose-invert-bullets: var(--text-subtle);
+  --tw-prose-invert-hr: var(--surface-background);
+  --tw-prose-invert-quotes: var(--text-default);
+  --tw-prose-invert-quote-borders: var(--link-default);
+  --tw-prose-invert-captions: var(--text-subtle);
+  --tw-prose-invert-code: var(--text-default);
+  --tw-prose-invert-pre-code: inherit;
+  --tw-prose-invert-pre-bg: var(--surface-background);
+  --tw-prose-invert-th-borders: var(--text-subtle);
+  --tw-prose-invert-td-borders: var(--surface-background);
+
+  --tw-prose-pre-bg: transparent;
+  --tw-prose-invert-pre-bg: transparent;
+}
+
+/* Base body styles */
+body {
+  background-color: theme("colors.page-background");
+  color: theme("colors.text-default");
+  font-family: theme("fontFamily.sans");
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*:focus-visible {
+  outline: 2px solid theme("colors.link-default"); /* Or another prominent color from your theme */
+  outline-offset: 2px;
+  border-radius: 2px; /* Optional: slightly rounded focus outline */
+}
+
+/* For dark mode, you might want a slightly different focus color if the default link color doesn't contrast well */
+.dark *:focus-visible {
+  outline-color: theme(
+    "colors.link-default"
+  ); /* link-default is already dark mode aware from our theme setup */
+}
+@layer utilities {
+  .max-w-readable {
+    max-width: 70ch; /* Adjust '70ch' to your preferred readable width.
+                        'ch' is a unit relative to the width of the '0' (zero) character.
+                        Common values range from 65ch to 80ch.
+                     */
+  }
+}
+
+/* Custom Text Selection Styles */
+::selection {
+  background-color: var(--selection-background);
+  color: var(--selection-text);
+}
+
+/* Firefox requires a separate rule for `::-moz-selection` */
+::-moz-selection {
+  background-color: var(--selection-background);
+  color: var(--selection-text);
+}
+
+/* Styles for rehype-pretty-code features */
+/* For highlighted lines */
+.prose pre .line.highlighted, /* If line numbers are off */
+.prose pre code .line.highlighted /* If line numbers are on and spans wrap lines */ {
+  background-color: rgba(
+    255,
+    220,
+    100,
+    0.15
+  ); /* Example: subtle yellow highlight */
+  display: block; /* Ensure it takes full width */
+  margin: 0 -1.5rem; /* Adjust to align with prose padding if pre has padding */
+  padding: 0 1.5rem; /* Adjust to align with prose padding */
+}
+.dark .prose pre .line.highlighted,
+.dark .prose pre code .line.highlighted {
+  background-color: rgba(
+    255,
+    230,
+    150,
+    0.1
+  ); /* Dark mode subtle yellow highlight */
+}
+
+/* For highlighted characters (e.g., a specific word) */
+.prose pre .highlighted-chars,
+.prose pre code .highlighted-chars {
+  background-color: rgba(100, 200, 255, 0.2);
+  border-radius: 2px;
+  padding: 0.1em 0.2em;
+}
+.dark .prose pre .highlighted-chars,
+.dark .prose pre code .highlighted-chars {
+  background-color: rgba(100, 180, 255, 0.25);
+}
+
+/* --- Styles to activate rehype-pretty-code CSS variables for dual themes --- */
+
+/* Apply default Shiki theme background and foreground to the <pre> block */
+/* The <pre> tag gets style="--shiki-light: fg; --shiki-dark: fg; --shiki-light-bg: bg; --shiki-dark-bg: bg;" */
+.prose pre[data-theme~="github-light"] {
+  background-color: var(
+    --shiki-light-bg
+  ) !important; /* Use Shiki light background */
+  color: var(--shiki-light) !important; /* Default Shiki light foreground */
+}
+
+/* When html has .dark class, apply Shiki dark theme background and foreground */
+html.dark .prose pre[data-theme~="github-dark"] {
+  background-color: var(
+    --shiki-dark-bg
+  ) !important; /* Use Shiki dark background */
+  color: var(--shiki-dark) !important; /* Default Shiki dark foreground */
+}
+
+/* Apply token colors using the CSS variables defined on each span */
+/* Each token span gets style="--shiki-light: colorA; --shiki-dark: colorB;" */
+.prose pre[data-theme~="github-light"] code span {
+  color: var(--shiki-light) !important;
+}
+
+html.dark .prose pre[data-theme~="github-dark"] code span {
+  color: var(--shiki-dark) !important;
+}
+
+/*
+  Note on !important:
+  We use !important here to ensure these Shiki-driven styles override any potentially
+  conflicting styles from @tailwindcss/typography's default prose settings for code blocks,
+  especially for color and background-color.
+  Your existing `--tw-prose-pre-bg: transparent;` helps, but explicit overrides here ensure
+  the Shiki variables are dominant for the code block's appearance.
+*/
