@@ -1,39 +1,65 @@
 // site/src/mdx-components.tsx
 import type { MDXComponents } from "mdx/types";
-// Example: import Image, { ImageProps } from 'next/image';
-// Example: import CustomLink from '@/components/ui/CustomLink'; // A custom link component
+import Image from "next/image"; // Import Next.js Image component
 
-// Define your custom MDX components here
-export const mdxCustomComponents: MDXComponents = {
-  // Example: Override the default h1
-  // h1: ({ children }) => <h1 className="text-3xl font-bold text-red-500">{children}</h1>,
-  // Example: Use Next.js Image for `img` tags (requires careful prop handling)
-  // img: (props) => {
-  //   const { src, alt, width, height, ...rest } = props as any; // Basic example
-  //   if (!src) return <img alt={alt || 'Image'} {...rest} />;
-  //   return (
-  //     <Image
-  //       src={src}
-  //       alt={alt || ""}
-  //       width={Number(width) || 700} // Provide default or ensure MDX provides these
-  //       height={Number(height) || 400} // Provide default or ensure MDX provides these
-  //       className="rounded-md my-4" // Example styling
-  //       {...rest}
-  //     />
-  //   );
-  // },
-  // Example: Use a custom link component for all anchor tags
-  // a: (props) => <CustomLink href={props.href || '#'}>{props.children}</CustomLink>,
-  // You can add more custom components for other HTML tags or custom shortcodes
-  // p: (props) => <p className="text-lg leading-relaxed my-4">{props.children}</p>,
+// Custom Image component to use Next.js <Image> for `img` tags in MDX
+const MdxImage = (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
+  // Destructure common img attributes.
+  // `width` and `height` from HTML attributes are destructured here to prevent
+  // them from being passed directly to Next.js <Image> when `fill` is true,
+  // as their types can conflict and they are not used by <Image> in fill mode.
+  const { src, alt, width, height, ...otherProps } = props;
+
+  // Check if src is a valid string for local (starts with /) or external (starts with http) images.
+  if (
+    typeof src === "string" &&
+    (src.startsWith("/") || src.startsWith("http"))
+  ) {
+    return (
+      // This span acts as the relatively positioned parent for the `fill` Image.
+      // `aspect-video` gives a default 16:9 aspect ratio. You can change this
+      // (e.g., `aspect-square`, `aspect-[4/3]`) or remove it if you want the
+      // image's natural aspect ratio (requires the image to have intrinsic dimensions
+      // or the parent to be sized differently).
+      <span className="block my-6 relative aspect-video">
+        <Image
+          src={src}
+          alt={alt || "Content image"} // Always provide meaningful alt text in your MDX.
+          fill // The `fill` prop makes the image responsive and fill its parent (the span).
+          style={{ objectFit: "contain" }} // 'contain' ensures the whole image is visible within the span.
+          // Other options: 'cover', 'fill' (as in prop name), 'none', 'scale-down'.
+          className="rounded-md" // Optional: adds rounded corners to your images.
+          {...otherProps} // Spreads any other valid HTML attributes (like title, id) to the Image.
+        />
+      </span>
+    );
+  }
+
+  // Fallback to a standard HTML <img> tag if:
+  // - `src` is not a string.
+  // - `src` is a string but doesn't look like a typical path (e.g., data URI that next/image might not handle well without config).
+  // - Or for any other reason next/image might not be suitable for a particular src.
+  // The original width and height attributes (if provided in MDX like <img width="X">) can be used here.
+  // eslint-disable-next-line @next/next/no-img-element
+  return (
+    <img
+      src={src}
+      alt={alt || "Content image"}
+      width={width}
+      height={height}
+      {...otherProps}
+    />
+  );
 };
 
-// The useMDXComponents function is not strictly needed if you export the object directly
-// and don't need to merge components dynamically in this hook-like way for client components.
-// For server components using MDXRemote, passing the object directly is cleaner.
-// export function useMDXComponents(components: MDXComponents): MDXComponents {
-//   return {
-//     ...mdxCustomComponents, // Spread your globally defined custom components
-//     ...components, // Spread any components passed in at the call site
-//   };
-// }
+// This is where you map Markdown/MDX elements to your custom React components.
+export const mdxCustomComponents: MDXComponents = {
+  // Map the standard `img` HTML tag (generated from ![]() in Markdown)
+  // to our custom MdxImage component.
+  img: MdxImage,
+
+  // You can add other custom component mappings here in the future. For example:
+  // a: (props) => <a className="text-link-default hover:underline" target="_blank" rel="noopener noreferrer" {...props} />,
+  // p: (props) => <p className="my-4 leading-relaxed">{...props} />,
+  // Custom components you create (e.g., <Callout type="info">...</Callout>) would also be mapped here if used in MDX.
+};
