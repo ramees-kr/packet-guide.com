@@ -24,6 +24,20 @@ const firaCode = Fira_Code({
 export const metadata: Metadata = {
   title: "Packet Guide",
   description: "Minimalist Developer Portfolio & Blog",
+  // Add or update the 'icons' field:
+  icons: {
+    icon: [
+      // Can be an array for multiple sizes/types or just one entry
+      // If you also have a traditional favicon.ico in public/
+      // { url: '/favicon.ico', type: 'image/x-icon', sizes: 'any' },
+      { url: "/icon.svg", type: "image/svg+xml" }, // Points to site/src/app/icon.svg (served at /icon.svg)
+    ],
+    apple: [
+      // For Apple touch icons
+      { url: "/apple-icon.png" }, // Example: place apple-icon.png in site/src/app/ or site/public/
+    ],
+    // You can also add shortcut icons, etc.
+  },
 };
 
 export default function RootLayout({
