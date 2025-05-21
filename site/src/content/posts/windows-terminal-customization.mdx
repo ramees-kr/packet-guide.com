@@ -1,294 +1,446 @@
 ---
-title: "Level Up Windows Terminal: Custom Setup with Starship Prompt"
+title: "Level Up Windows Terminal:
+Custom Setup with Oh My Posh"
 date: "2025-06-15"
-excerpt: "A step-by-step guide for technical support engineers to supercharge their Windows Terminal with Starship, CLI tools, and productivity-boosting customizations."
+excerpt: "A step-by-step guide for technical support engineers and new developers to supercharge their Windows Terminal with Oh My Posh, CLI tools, and productivity-boosting customizations."
 author: "Packet Pilot"
 tags:
   - Windows Terminal
   - WSL2
   - PowerShell
-  - Starship
+  - Oh My Posh
   - Developer Tools
 ---
 
-## 🚀 Why Optimize Windows Terminal?
+## 🚀 Why Optimize Your Windows Terminal?
 
-As a Technical Support Engineer, your terminal is your cockpit. Customizing it with a modern prompt, productivity CLI tools, and polished visuals not only makes it easier to work across PowerShell and WSL2 but also drastically improves the debugging and scripting experience.
+As a Technical Support Engineer or Developer, your terminal is your command center. Customizing it with a modern prompt like **Oh My Posh**, along with essential CLI tools and a polished look, not only makes working across PowerShell and WSL2 (Windows Subsystem for Linux) more enjoyable but also significantly boosts your efficiency in debugging, scripting, and daily operations.
 
-This guide walks you through building a clean, consistent terminal environment using [Starship](https://starship.rs/) — a fast, customizable, cross-shell prompt.
+This guide will walk you through creating a clean, consistent, and powerful terminal environment.
 
 ---
 
-## 1. 🧰 Initial Setup
+## 1. 🧰 Initial Setup: The Foundation
+
+First, let's ensure you have the core components: Windows Terminal and your preferred shells.
 
 ### ✅ Install Core Tools
 
-Install **Windows Terminal** and the shells you'll use.
+1.  **Windows Terminal**:
+    If you don't have it, install **Windows Terminal** from the Microsoft Store for the best experience.
 
-```powershell
-# PowerShell 7
-winget install --id Microsoft.PowerShell --source winget
+2.  **PowerShell 7+**:
+    Modern PowerShell offers significant improvements. Install it via winget:
 
-# Install WSL and Ubuntu
-wsl --install
-wsl --set-default-version 2
-```
+    ```powershell
+    winget install --id Microsoft.PowerShell --source winget
+    ```
 
-Launch the Microsoft Store, install **Ubuntu** (22.04 or later recommended), and reboot if needed.
+    Ensure Windows Terminal uses this new version as a profile.
+
+3.  **WSL2 and Ubuntu**:
+    Enable WSL and install your preferred Linux distribution (Ubuntu is a great choice).
+    ```powershell
+    wsl --install
+    wsl --set-default-version 2
+    ```
+    If you haven't specified a distribution, open the Microsoft Store, search for "Ubuntu" (22.04 LTS or later recommended), and install it. A reboot might be necessary after installation or enabling WSL.
 
 ---
 
-## 2. 🎨 Look and Feel
+## 2. 🎨 Look and Feel: Visual Harmony
 
-### 🔤 Fonts
+A visually appealing terminal is easier on the eyes and can make your work more pleasant.
 
-Install a Nerd Font to render icons and symbols in Starship:
+### 🔤 Install a Nerd Font
 
-- Recommended: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+Oh My Posh uses glyphs and symbols for its beautiful prompts. **Nerd Fonts** are patched developer fonts that include these icons.
 
-Apply the font in Windows Terminal settings:
+- **Recommended Font**: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads) or [Cascadia Code PL](https://github.com/microsoft/cascadia-code) (Cascadia Code also has a Nerd Font version, often called Caskaydia Cove Nerd Font).
 
-```json
-"font": {
-  "face": "FiraCode Nerd Font",
-  "size": 12
-}
-```
+- **Easy Installation with Oh My Posh (PowerShell)**:
+  Oh My Posh can help install a Nerd Font. Open PowerShell and run:
+
+  ```powershell
+  oh-my-posh font install
+  ```
+
+  This command will present a list of fonts to choose from. Pick one (e.g., `FiraCode NF`) and let it install.
+  _Note: You need to install Oh My Posh first (see next section) to use this command. If you prefer manual installation, download your chosen Nerd Font and install it on Windows (right-click the font file -> Install for all users)._
+
+- **Apply the Font in Windows Terminal**:
+  Open Windows Terminal settings (Ctrl + ,). You can either use the JSON file (`settings.json`) or the GUI:
+
+  1.  Select the profile you want to modify (e.g., PowerShell, Ubuntu).
+  2.  Go to the "Appearance" tab.
+  3.  Under "Font face," select your installed Nerd Font (e.g., "FiraCode NF", "CaskaydiaCove NF").
+  4.  Set a comfortable font size (e.g., 11 or 12).
+
+  Alternatively, in `settings.json`:
+
+  ```json
+  // In your profile settings within settings.json
+  "font": {
+    "face": "FiraCode NF", // Or your chosen Nerd Font
+    "size": 12
+  }
+  ```
+
+  **Restart Windows Terminal for font changes to take effect.**
 
 ### 🌈 Themes and Acrylic Effects
 
-Set your profile’s appearance in `settings.json`:
+Make your terminal sleek with built-in color schemes and transparency.
 
-```json
-{
-  "profiles": {
-    "list": [
-      {
-        "name": "PowerShell",
-        "fontFace": "FiraCode Nerd Font",
-        "colorScheme": "One Half Dark",
-        "useAcrylic": true,
-        "acrylicOpacity": 0.85
-      },
-      {
-        "name": "Ubuntu",
-        "fontFace": "FiraCode Nerd Font",
-        "colorScheme": "Dracula",
-        "useAcrylic": true,
-        "acrylicOpacity": 0.85
-      }
-    ]
+- In Windows Terminal settings (`settings.json` or GUI):
+
+  - For each profile (PowerShell, Ubuntu):
+    - Choose a `colorScheme` (e.g., "One Half Dark", "Dracula", "Campbell PowerShell").
+    - Enable `useAcrylic` (boolean: `true` or `false`).
+    - Adjust `acrylicOpacity` (e.g., `0.75` for subtle transparency).
+
+  Example snippet for `settings.json`:
+
+  ```json
+  {
+    // ... other settings ...
+    "profiles": {
+      "list": [
+        {
+          // PowerShell Profile
+          "name": "PowerShell",
+          "commandline": "pwsh.exe", // For PowerShell 7+
+          "fontFace": "FiraCode NF",
+          "colorScheme": "One Half Dark",
+          "useAcrylic": true,
+          "acrylicOpacity": 0.8
+        },
+        {
+          // Ubuntu Profile
+          "name": "Ubuntu",
+          "source": "Windows.Terminal.Wsl", // Or specify your distro
+          "fontFace": "FiraCode NF",
+          "colorScheme": "Dracula",
+          "useAcrylic": true,
+          "acrylicOpacity": 0.8
+        }
+      ]
+    }
+    // ... other settings ...
   }
-}
-```
+  ```
 
 ---
 
-## 3. ✨ Setting Up Starship Prompt
+## 3. ✨ Setting Up Oh My Posh Prompt
 
-Starship gives you a smart, minimal prompt with cross-shell support.
+**Oh My Posh** is a powerful, themeable prompt engine that works across shells.
 
-### 🛠 Install Starship
+### 🛠️ Install Oh My Posh
 
-#### PowerShell:
+#### For PowerShell:
 
-```powershell
-Invoke-WebRequest https://starship.rs/install.ps1 -UseBasicParsing | Invoke-Expression
-```
+There are several ways to install Oh My Posh:
 
-Add to `$PROFILE`:
+1.  **Microsoft Store (Recommended for simplicity & auto-updates)**:
+    Search for "Oh My Posh" in the Microsoft Store and install it.
 
-```powershell
-Invoke-Expression (&starship init powershell)
-```
+2.  **Winget (Command-Line)**:
+    ```powershell
+    winget install JanDeDobbeleer.OhMyPosh -s winget
+    ```
 
-> Ensure `$PROFILE` is loaded on startup. Create it if it doesn’t exist:
->
-> ```powershell
-> if (!(Test-Path -Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
-> ```
+After installation, you need to configure your PowerShell profile to use it.
 
-#### Ubuntu WSL:
+- **Edit your PowerShell Profile**:
+  ```powershell
+  if (!(Test-Path -Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
+  notepad $PROFILE
+  ```
+- **Add the Oh My Posh initialization line**:
+  ```powershell
+  oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/jandedobbeleer.omp.json" | Invoke-Expression
+  ```
+  _Note: The path to themes might vary slightly based on your installation method. `$env:POSH_THEMES_PATH` is an environment variable Oh My Posh often sets. If it doesn't work, you might need to find the themes folder (e.g., `~\AppData\Local\Programs\oh-my-posh\themes` for winget/scoop, or `C:\Users\<YourUser>\AppData\Local\Packages\JanDeDobbeleer.OhMyPosh_<uniqueid>\LocalCache\Roaming\oh-my-posh\themes`for Microsoft Store version). You can discover themes by typing`Get-PoshThemes` in PowerShell once Oh My Posh is installed and initialized once.\_
 
-```bash
-curl -sS https://starship.rs/install.sh | sh
-```
+#### For Ubuntu (WSL2):
 
-Add to `~/.bashrc` or `~/.zshrc`:
+1.  **Install Oh My Posh**:
+    ```bash
+    sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+    sudo chmod +x /usr/local/bin/oh-my-posh
+    ```
+2.  **Download Themes (if needed)**:
+    You'll need the theme files. You can get them from the Oh My Posh GitHub repository or copy them from your Windows installation if accessible. A common practice is:
+    ```bash
+    mkdir -p ~/.poshthemes
+    wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
+    unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
+    chmod u+w ~/.poshthemes/*.omp.json
+    rm ~/.poshthemes/themes.zip
+    ```
+3.  **Add to `~/.bashrc` (for Bash) or `~/.zshrc` (for Zsh)**:
+    Open your shell's configuration file (e.g., `nano ~/.bashrc`). Add the following line at the end:
+    ```bash
+    eval "$(oh-my-posh init bash --config ~/.poshthemes/jandedobbeleer.omp.json)"
+    ```
+    _Replace `jandedobbeleer.omp.json` with your desired theme file name._
 
-```bash
-eval "$(starship init bash)"
-```
+### 🎨 Choosing and Applying an Oh My Posh Theme
 
-### ⚙️ Customize Starship
+Oh My Posh comes with many pre-built themes.
 
-Create a config file:
+- **To see available themes in PowerShell**: After installing, type `Get-PoshThemes` in PowerShell. This will list themes and their paths.
+- **To change your theme**:
 
-```bash
-mkdir -p ~/.config && touch ~/.config/starship.toml
-```
+  - **PowerShell**: Modify the `--config` path in your `$PROFILE` script to point to a different `.omp.json` file.
+  - **WSL (Bash/Zsh)**: Modify the `--config` path in your `~/.bashrc` or `~/.zshrc` file.
 
-Example `~/.config/starship.toml`:
+  For example, to use the `atomic` theme:
 
-```toml
-format = """
-$directory$git_branch$git_status$nodejs$python$cmd_duration$line_break$character
-"""
+  - PowerShell `$PROFILE`:
+    ```powershell
+    oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/atomic.omp.json" | Invoke-Expression
+    ```
+  - WSL `~/.bashrc`:
+    ```bash
+    eval "$(oh-my-posh init bash --config ~/.poshthemes/atomic.omp.json)"
+    ```
 
-[directory]
-style = "cyan"
-
-[git_branch]
-symbol = "🌱 "
-
-[character]
-success_symbol = "[❯](bold green)"
-error_symbol = "[❯](bold red)"
-```
-
-Restart your terminal to apply changes.
+**Restart your terminal or source your profile files (`. $PROFILE` in PowerShell, `source ~/.bashrc` in Bash) to see changes.**
 
 ---
 
 ## 4. 🧪 Shell Profile Customization
 
-### PowerShell `$PROFILE`
+Your shell profile (`$PROFILE` for PowerShell, `~/.bashrc` or `~/.zshrc` for Bash/Zsh) is where you can add aliases, functions, and other personalizations.
+
+### PowerShell `$PROFILE` Example
+
+Make sure these lines are in your `notepad $PROFILE` file:
 
 ```powershell
-# Aliases
-Set-Alias ll Get-ChildItem
-Set-Alias grep Select-String
-Set-Alias gs git status
+# Oh My Posh Initialization (ensure this is after any PATH modifications if needed)
+oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/jandedobbeleer.omp.json" | Invoke-Expression
 
-# Prompt
-Invoke-Expression (&starship init powershell)
+# Aliases
+Set-Alias k kubectl
+Set-Alias ll Get-ChildItem -Attributes !Directory+!System+!Hidden -Force
+Set-Alias la Get-ChildItem -Force
+Set-Alias grep Select-String
+Set-Alias gs 'git status'
+Set-Alias ga 'git add .'
+Set-Alias gc 'git commit -m'
+Set-Alias gp 'git push'
+
+# Custom Functions (Optional)
+function cd.. { Set-Location .. }
+function cd... { Set-Location ../.. }
 ```
 
-### Bash (`~/.bashrc` or `~/.zshrc`)
+### Bash (`~/.bashrc` or `~/.zshrc`) Example
 
 ```bash
+# Oh My Posh Initialization
+eval "$(oh-my-posh init bash --config ~/.poshthemes/jandedobbeleer.omp.json)"
+
+# Aliases
 alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
 alias gs='git status'
+alias ga='git add .'
+alias gc='git commit -m'
+alias gp='git push'
 alias grep='grep --color=auto'
 
-# Prompt
-eval "$(starship init bash)"
+# Custom Functions (Optional)
+cdd() {
+  cd "$(find . -maxdepth 3 -type d -print | fzf)"
+}
 ```
 
 ---
 
 ## 5. 🔧 Install CLI Productivity Tools
 
+Enhance your command-line capabilities with these powerful tools:
+
 ### In Ubuntu (WSL2)
 
 ```bash
-sudo apt update
-sudo apt install fzf bat exa htop git zoxide
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y fzf bat exa htop git zoxide gh
 ```
 
-### In PowerShell (via Scoop)
+- If `exa` is not found, it might be `exa-community` or you might need a newer Ubuntu / PPA. `lsd` is a good alternative: `sudo apt install lsd`.
+- `bat` might be named `batcat` on older Ubuntu versions (create an alias: `alias bat=batcat`).
+
+### In PowerShell (using Scoop or Winget)
+
+**Scoop** is a popular command-line installer for Windows.
 
 ```powershell
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-iwr -useb get.scoop.sh | iex
+# Install Scoop if you haven't already
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+Invoke-RestMethod -Uri get.scoop.sh | Invoke-Expression
 
+# Install tools
 scoop install fzf bat exa gh zoxide
+# htop equivalent on Windows is not directly available, but Task Manager / Resource Monitor are good.
+# For a terminal-based process viewer, try 'gops' (scoop install gops) or 'procs' (scoop install procs)
 ```
 
-- `fzf`: Fuzzy finder
-- `bat`: Better `cat` with syntax highlighting
-- `exa`: Modern `ls`
-- `htop`: Interactive process monitor
-- `zoxide`: Smarter `cd` replacement
-- `gh`: GitHub CLI
+**Alternatively, using Winget for some tools:**
+
+```powershell
+winget install fzf
+winget install bat
+winget install exa # Might not be available, check winget sources
+winget install GitHub.cli # For gh
+winget install zoxide
+```
+
+**Key Tools:**
+
+- `fzf`: A command-line fuzzy finder – incredibly useful for searching history, files, etc.
+- `bat`: A `cat` clone with syntax highlighting and Git integration.
+- `exa` or `lsd`: Modern replacements for `ls` with more features and better defaults.
+- `htop`: (Linux) An interactive process viewer.
+- `zoxide`: A smarter `cd` command that learns your habits.
+- `gh`: The GitHub CLI.
+
+**Integrate `zoxide` into your shells:**
+
+- PowerShell (`$PROFILE`):
+  ```powershell
+  oh-my-posh init pwsh --config "..." | Invoke-Expression # Your OMP init
+  Invoke-Expression (&zoxide init powershell)
+  ```
+- Bash (`~/.bashrc`):
+  ```bash
+  eval "$(oh-my-posh init bash --config ...)" # Your OMP init
+  eval "$(zoxide init bash)"
+  ```
 
 ---
 
-## 6. ⚙️ Windows Terminal Settings
+## 6. ⚙️ Windows Terminal `settings.json` Overview
 
-### Full `settings.json` Example
+Here's a more complete `settings.json` example, incorporating the elements discussed.
+**Remember to replace GUIDs with your actual profile GUIDs if you copy this directly.** Windows Terminal generates these automatically. You can find them in your existing `settings.json`.
 
 ```json
 {
   "$schema": "https://aka.ms/terminal-profiles-schema",
-  "defaultProfile": "{PowerShell_GUID}",
+  "defaultProfile": "{YOUR_POWERSHELL_GUID}", // Set your preferred default
+  "copyOnSelect": false,
+  "copyFormatting": "none",
   "profiles": {
+    "defaults": {
+      "font": {
+        "face": "FiraCode NF", // Your chosen Nerd Font
+        "size": 11
+      },
+      "useAcrylic": true,
+      "acrylicOpacity": 0.75
+    },
     "list": [
       {
-        "guid": "{PowerShell_GUID}",
+        "guid": "{YOUR_POWERSHELL_GUID}", // Replace with your actual PowerShell GUID
         "name": "PowerShell",
-        "source": "Windows.Terminal.PowershellCore",
-        "colorScheme": "One Half Dark",
-        "fontFace": "FiraCode Nerd Font",
-        "useAcrylic": true,
-        "acrylicOpacity": 0.85
+        "commandline": "pwsh.exe", // For PowerShell 7+
+        "hidden": false,
+        "colorScheme": "Campbell PowerShell", // Or "One Half Dark", etc.
+        "startingDirectory": "%USERPROFILE%"
       },
       {
-        "guid": "{Ubuntu_GUID}",
+        "guid": "{YOUR_UBUNTU_GUID}", // Replace with your actual Ubuntu GUID
         "name": "Ubuntu",
-        "source": "Windows.Terminal.Wsl",
-        "colorScheme": "Dracula",
-        "fontFace": "FiraCode Nerd Font",
-        "useAcrylic": true,
-        "acrylicOpacity": 0.85
+        "source": "Windows.Terminal.Wsl", // Or specific distro like "Ubuntu-22.04"
+        "hidden": false,
+        "colorScheme": "Dracula"
       }
+      // Add other profiles like Azure Cloud Shell, Developer Command Prompt, etc.
     ]
   },
   "schemes": [
+    // Add custom color schemes here if desired, or use built-in ones.
+    // Example: Dracula (if not built-in or you want to tweak)
     {
       "name": "Dracula",
-      "foreground": "#F8F8F2",
+      "cursorColor": "#F8F8F2",
+      "selectionBackground": "#44475A",
       "background": "#282A36",
+      "foreground": "#F8F8F2",
       "black": "#000000",
-      "red": "#FF5555",
-      "green": "#50FA7B",
-      "yellow": "#F1FA8C",
       "blue": "#BD93F9",
-      "purple": "#FF79C6",
       "cyan": "#8BE9FD",
-      "white": "#BBBBBB",
+      "green": "#50FA7B",
+      "purple": "#FF79C6",
+      "red": "#FF5555",
+      "white": "#F8F8F2",
+      "yellow": "#F1FA8C",
       "brightBlack": "#555555",
-      "brightRed": "#FF6E67",
-      "brightGreen": "#5AF78E",
-      "brightYellow": "#F4F99D",
-      "brightBlue": "#CAA9FA",
-      "brightPurple": "#FF92D0",
-      "brightCyan": "#9AEDFE",
-      "brightWhite": "#FFFFFF"
+      "brightBlue": "#BD93F9",
+      "brightCyan": "#8BE9FD",
+      "brightGreen": "#50FA7B",
+      "brightPurple": "#FF79C6",
+      "brightRed": "#FF5555",
+      "brightWhite": "#FFFFFF",
+      "brightYellow": "#F1FA8C"
     }
   ],
   "keybindings": [
+    { "command": { "action": "copy", "singleLine": false }, "keys": "ctrl+c" },
+    { "command": "paste", "keys": "ctrl+v" },
+    { "command": "find", "keys": "ctrl+shift+f" },
     {
-      "command": "splitPane",
-      "keys": ["ctrl+shift+d"]
+      "command": {
+        "action": "splitPane",
+        "split": "auto",
+        "splitMode": "duplicate"
+      },
+      "keys": "alt+shift+d"
     },
     {
-      "command": "newTab",
-      "keys": ["ctrl+t"]
-    }
+      "command": { "action": "splitPane", "split": "horizontal" },
+      "keys": "alt+shift+-"
+    },
+    {
+      "command": { "action": "splitPane", "split": "vertical" },
+      "keys": "alt+shift+plus"
+    },
+    { "command": "closePane", "keys": "ctrl+shift+w" },
+    { "command": "newTab", "keys": "ctrl+t" },
+    { "command": "closeTab", "keys": "ctrl+w" }
+    // Add more custom keybindings as needed
   ],
-  "startupActions": "newTab; splitPane"
+  "actions": [] // "actions" is the newer name for "keybindings" in recent versions, but "keybindings" is still supported.
 }
 ```
-
-> Replace `{PowerShell_GUID}` and `{Ubuntu_GUID}` with actual values (auto-generated by Terminal).
 
 ---
 
 ## 7. 🧭 Bonus: Workflow Tips
 
-- Use `Ctrl+Shift+D` to split panes.
-- Use `Alt+Shift+D` (or your shortcut) to open vertical splits.
-- Launch common layouts using `startupActions`.
+- **Tab Management**: Use `Ctrl+T` for a new tab and `Ctrl+W` to close it. Navigate tabs with `Ctrl+Tab` and `Ctrl+Shift+Tab`.
+- **Pane Splitting**:
+  - `Alt+Shift+D`: Duplicate current pane (split automatically).
+  - `Alt+Shift+-`: Split horizontally.
+  - `Alt+Shift++`: Split vertically.
+  - Navigate panes with `Alt` + arrow keys. Resize with `Alt+Shift` + arrow keys.
+- **Command Palette**: `Ctrl+Shift+P` opens the command palette to quickly access all Windows Terminal features.
+- **Zoom**: `Ctrl` + `+` / `-` / `0` to zoom in/out or reset.
 
 ---
 
 ## ✅ Conclusion
 
-By combining Windows Terminal with WSL2, Starship, and CLI tools, you now have a **beautiful, consistent, and productive shell environment** for technical support, scripting, and log analysis. And it works seamlessly across both Windows and Linux shells.
+By combining Windows Terminal with WSL2, the powerful **Oh My Posh** prompt, and a suite of essential CLI tools, you've now crafted a **beautiful, consistent, and highly productive shell environment**. This setup will streamline your work across both Windows (PowerShell) and Linux (WSL2), making tasks like technical support, scripting, development, and log analysis more efficient and enjoyable.
 
-> Want to go even further? Add `tmux`, GitHub CLI, and `navi` for command cheatsheets.
+Your terminal should be a tool that empowers you. With these customizations, it's ready to do just that!
 
-Let your terminal work _for_ you, not against you.
+Happy customizing!
 
 ---
