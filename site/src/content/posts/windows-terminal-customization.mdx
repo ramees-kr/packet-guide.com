@@ -1,0 +1,294 @@
+---
+title: "Level Up Windows Terminal: Custom Setup with Starship Prompt"
+date: "2025-06-15"
+excerpt: "A step-by-step guide for technical support engineers to supercharge their Windows Terminal with Starship, CLI tools, and productivity-boosting customizations."
+author: "Packet Pilot"
+tags:
+  - Windows Terminal
+  - WSL2
+  - PowerShell
+  - Starship
+  - Developer Tools
+---
+
+## 🚀 Why Optimize Windows Terminal?
+
+As a Technical Support Engineer, your terminal is your cockpit. Customizing it with a modern prompt, productivity CLI tools, and polished visuals not only makes it easier to work across PowerShell and WSL2 but also drastically improves the debugging and scripting experience.
+
+This guide walks you through building a clean, consistent terminal environment using [Starship](https://starship.rs/) — a fast, customizable, cross-shell prompt.
+
+---
+
+## 1. 🧰 Initial Setup
+
+### ✅ Install Core Tools
+
+Install **Windows Terminal** and the shells you'll use.
+
+```powershell
+# PowerShell 7
+winget install --id Microsoft.PowerShell --source winget
+
+# Install WSL and Ubuntu
+wsl --install
+wsl --set-default-version 2
+```
+
+Launch the Microsoft Store, install **Ubuntu** (22.04 or later recommended), and reboot if needed.
+
+---
+
+## 2. 🎨 Look and Feel
+
+### 🔤 Fonts
+
+Install a Nerd Font to render icons and symbols in Starship:
+
+- Recommended: [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+
+Apply the font in Windows Terminal settings:
+
+```json
+"font": {
+  "face": "FiraCode Nerd Font",
+  "size": 12
+}
+```
+
+### 🌈 Themes and Acrylic Effects
+
+Set your profile’s appearance in `settings.json`:
+
+```json
+{
+  "profiles": {
+    "list": [
+      {
+        "name": "PowerShell",
+        "fontFace": "FiraCode Nerd Font",
+        "colorScheme": "One Half Dark",
+        "useAcrylic": true,
+        "acrylicOpacity": 0.85
+      },
+      {
+        "name": "Ubuntu",
+        "fontFace": "FiraCode Nerd Font",
+        "colorScheme": "Dracula",
+        "useAcrylic": true,
+        "acrylicOpacity": 0.85
+      }
+    ]
+  }
+}
+```
+
+---
+
+## 3. ✨ Setting Up Starship Prompt
+
+Starship gives you a smart, minimal prompt with cross-shell support.
+
+### 🛠 Install Starship
+
+#### PowerShell:
+
+```powershell
+Invoke-WebRequest https://starship.rs/install.ps1 -UseBasicParsing | Invoke-Expression
+```
+
+Add to `$PROFILE`:
+
+```powershell
+Invoke-Expression (&starship init powershell)
+```
+
+> Ensure `$PROFILE` is loaded on startup. Create it if it doesn’t exist:
+>
+> ```powershell
+> if (!(Test-Path -Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
+> ```
+
+#### Ubuntu WSL:
+
+```bash
+curl -sS https://starship.rs/install.sh | sh
+```
+
+Add to `~/.bashrc` or `~/.zshrc`:
+
+```bash
+eval "$(starship init bash)"
+```
+
+### ⚙️ Customize Starship
+
+Create a config file:
+
+```bash
+mkdir -p ~/.config && touch ~/.config/starship.toml
+```
+
+Example `~/.config/starship.toml`:
+
+```toml
+format = """
+$directory$git_branch$git_status$nodejs$python$cmd_duration$line_break$character
+"""
+
+[directory]
+style = "cyan"
+
+[git_branch]
+symbol = "🌱 "
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+```
+
+Restart your terminal to apply changes.
+
+---
+
+## 4. 🧪 Shell Profile Customization
+
+### PowerShell `$PROFILE`
+
+```powershell
+# Aliases
+Set-Alias ll Get-ChildItem
+Set-Alias grep Select-String
+Set-Alias gs git status
+
+# Prompt
+Invoke-Expression (&starship init powershell)
+```
+
+### Bash (`~/.bashrc` or `~/.zshrc`)
+
+```bash
+alias ll='ls -alF'
+alias gs='git status'
+alias grep='grep --color=auto'
+
+# Prompt
+eval "$(starship init bash)"
+```
+
+---
+
+## 5. 🔧 Install CLI Productivity Tools
+
+### In Ubuntu (WSL2)
+
+```bash
+sudo apt update
+sudo apt install fzf bat exa htop git zoxide
+```
+
+### In PowerShell (via Scoop)
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+iwr -useb get.scoop.sh | iex
+
+scoop install fzf bat exa gh zoxide
+```
+
+- `fzf`: Fuzzy finder
+- `bat`: Better `cat` with syntax highlighting
+- `exa`: Modern `ls`
+- `htop`: Interactive process monitor
+- `zoxide`: Smarter `cd` replacement
+- `gh`: GitHub CLI
+
+---
+
+## 6. ⚙️ Windows Terminal Settings
+
+### Full `settings.json` Example
+
+```json
+{
+  "$schema": "https://aka.ms/terminal-profiles-schema",
+  "defaultProfile": "{PowerShell_GUID}",
+  "profiles": {
+    "list": [
+      {
+        "guid": "{PowerShell_GUID}",
+        "name": "PowerShell",
+        "source": "Windows.Terminal.PowershellCore",
+        "colorScheme": "One Half Dark",
+        "fontFace": "FiraCode Nerd Font",
+        "useAcrylic": true,
+        "acrylicOpacity": 0.85
+      },
+      {
+        "guid": "{Ubuntu_GUID}",
+        "name": "Ubuntu",
+        "source": "Windows.Terminal.Wsl",
+        "colorScheme": "Dracula",
+        "fontFace": "FiraCode Nerd Font",
+        "useAcrylic": true,
+        "acrylicOpacity": 0.85
+      }
+    ]
+  },
+  "schemes": [
+    {
+      "name": "Dracula",
+      "foreground": "#F8F8F2",
+      "background": "#282A36",
+      "black": "#000000",
+      "red": "#FF5555",
+      "green": "#50FA7B",
+      "yellow": "#F1FA8C",
+      "blue": "#BD93F9",
+      "purple": "#FF79C6",
+      "cyan": "#8BE9FD",
+      "white": "#BBBBBB",
+      "brightBlack": "#555555",
+      "brightRed": "#FF6E67",
+      "brightGreen": "#5AF78E",
+      "brightYellow": "#F4F99D",
+      "brightBlue": "#CAA9FA",
+      "brightPurple": "#FF92D0",
+      "brightCyan": "#9AEDFE",
+      "brightWhite": "#FFFFFF"
+    }
+  ],
+  "keybindings": [
+    {
+      "command": "splitPane",
+      "keys": ["ctrl+shift+d"]
+    },
+    {
+      "command": "newTab",
+      "keys": ["ctrl+t"]
+    }
+  ],
+  "startupActions": "newTab; splitPane"
+}
+```
+
+> Replace `{PowerShell_GUID}` and `{Ubuntu_GUID}` with actual values (auto-generated by Terminal).
+
+---
+
+## 7. 🧭 Bonus: Workflow Tips
+
+- Use `Ctrl+Shift+D` to split panes.
+- Use `Alt+Shift+D` (or your shortcut) to open vertical splits.
+- Launch common layouts using `startupActions`.
+
+---
+
+## ✅ Conclusion
+
+By combining Windows Terminal with WSL2, Starship, and CLI tools, you now have a **beautiful, consistent, and productive shell environment** for technical support, scripting, and log analysis. And it works seamlessly across both Windows and Linux shells.
+
+> Want to go even further? Add `tmux`, GitHub CLI, and `navi` for command cheatsheets.
+
+Let your terminal work _for_ you, not against you.
+
+---
