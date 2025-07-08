@@ -22,23 +22,42 @@ export interface Post extends PostMeta {
   source: string; // Source is now the raw MDX string content
 }
 
+// --- Helper function to get all files recursively ---
+function getMarkdownFilePathsRecursively(directoryPath: string): string[] {
+  let filePaths: string[] = [];
+  try {
+    const entries = fs.readdirSync(directoryPath, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullEntryPath = path.join(directoryPath, entry.name);
+      if (entry.isDirectory()) {
+        filePaths = filePaths.concat(
+          getMarkdownFilePathsRecursively(fullEntryPath)
+        );
+      } else if (/\.mdx?$/.test(entry.name)) {
+        // Filter for .md or .mdx files
+        filePaths.push(fullEntryPath);
+      }
+    }
+  } catch (error) {
+    // Log error but don't throw, allowing partial reads if some subdirs are problematic
+    console.error(
+      `Error reading directory ${directoryPath} for recursive file search:`,
+      error
+    );
+  }
+  return filePaths;
+}
+
 const postsDirectory = path.join(process.cwd(), "src/content/posts");
 
 export function getSortedPostsData(): PostMeta[] {
-  // ... (this function remains the same as before)
-  let filenames: string[];
-  try {
-    filenames = fs.readdirSync(postsDirectory);
-  } catch (error) {
-    console.error(`Error reading posts directory: ${postsDirectory}`, error);
-    return [];
-  }
+  const allFilePaths = getMarkdownFilePathsRecursively(postsDirectory);
 
-  const allPostsData = filenames
-    .filter((filename) => /\.mdx?$/.test(filename))
-    .map((fileName): PostMeta | null => {
+  const allPostsData = allFilePaths
+    .map((fullPath): PostMeta | null => {
+      const fileName = path.basename(fullPath); // Get just the filename
       const slug = fileName.replace(/\.mdx?$/, "");
-      const fullPath = path.join(postsDirectory, fileName);
+
       let fileContents;
       try {
         fileContents = fs.readFileSync(fullPath, "utf8");
@@ -46,19 +65,23 @@ export function getSortedPostsData(): PostMeta[] {
         console.error(`Error reading file: ${fullPath}`, error);
         return null;
       }
+
       const matterResult = matter(fileContents);
+
       if (
         !matterResult.data.title ||
         !matterResult.data.date ||
         !matterResult.data.excerpt
       ) {
         console.warn(
-          `Post "${fileName}" is missing required frontmatter (title, date, or excerpt). Skipping.`
+          `Post "${fileName}" (at ${fullPath}) is missing required frontmatter. Skipping.`
         );
         return null;
       }
+
       const frontmatter = matterResult.data as PostFrontmatter;
       const stats = readingTime(matterResult.content);
+
       return {
         slug,
         readingTime: stats.text,
@@ -77,67 +100,57 @@ export function getSortedPostsData(): PostMeta[] {
 }
 
 export async function getPostData(slug: string): Promise<Post | null> {
-  const mdxPath = path.join(postsDirectory, `${slug}.mdx`);
-  const mdPath = path.join(postsDirectory, `${slug}.md`);
-  let fullPath: string;
+  const allFilePaths = getMarkdownFilePathsRecursively(postsDirectory);
 
-  if (fs.existsSync(mdxPath)) {
-    fullPath = mdxPath;
-  } else if (fs.existsSync(mdPath)) {
-    fullPath = mdPath;
-  } else {
-    console.error(`Post with slug "${slug}" not found in ${postsDirectory}`);
+  const targetFilePath = allFilePaths.find((filePath) => {
+    const fileName = path.basename(filePath);
+    return fileName.replace(/\.mdx?$/, "") === slug;
+  });
+
+  if (!targetFilePath) {
+    console.error(
+      `Post with slug "${slug}" not found in ${postsDirectory} or its subdirectories.`
+    );
     return null;
   }
 
   let fileContents;
   try {
-    fileContents = fs.readFileSync(fullPath, "utf8");
+    fileContents = fs.readFileSync(targetFilePath, "utf8");
   } catch (error) {
-    console.error(`Error reading file: ${fullPath}`, error);
+    console.error(`Error reading file: ${targetFilePath}`, error);
     return null;
   }
 
-  const { data, content } = matter(fileContents); // 'content' is the raw MDX string
+  const { data, content } = matter(fileContents);
 
   if (!data.title || !data.date || !data.excerpt) {
     console.warn(
-      `Post "${slug}" is missing required frontmatter (title, date, or excerpt).`
+      `Post "${slug}" (at ${targetFilePath}) is missing required frontmatter.`
     );
   }
 
   const frontmatter = data as PostFrontmatter;
   const stats = readingTime(content);
 
-  // REMOVED: const mdxSource = await serialize(content, { ... });
-
+  // For MDXRemote from /rsc, we return the raw content string
   return {
     slug,
     readingTime: stats.text,
-    source: content, // Return the raw MDX content string
+    source: content,
     ...frontmatter,
   };
 }
 
 export function getAllPostSlugs(): { slug: string }[] {
-  // ... (this function remains the same as the last corrected version)
-  let filenames: string[];
-  try {
-    filenames = fs.readdirSync(postsDirectory);
-  } catch (error) {
-    console.error(
-      `Error reading posts directory for slugs: ${postsDirectory}`,
-      error
-    );
-    return [];
-  }
-  return filenames
-    .filter((filename) => /\.mdx?$/.test(filename))
-    .map((fileName) => {
-      return {
-        slug: fileName.replace(/\.mdx?$/, ""),
-      };
-    });
+  const allFilePaths = getMarkdownFilePathsRecursively(postsDirectory);
+
+  return allFilePaths.map((fullPath) => {
+    const fileName = path.basename(fullPath);
+    return {
+      slug: fileName.replace(/\.mdx?$/, ""),
+    };
+  });
 }
 
 export interface ProjectFrontmatter {
