@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
         {/* Social Links Placeholder */}
         <div className="mb-4">
           <a
-            href="#" // Replace with your GitHub URL later
+            href="https://github.com/ramees-kr"
             target="_blank"
             rel="noopener noreferrer"
             className="text-text-subtle hover:text-link-default transition-colors mx-2"
@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
           </a>
           <span className="text-text-subtle">|</span>
           <a
-            href="#" // Replace with your LinkedIn URL later
+            href="https://www.linkedin.com/in/rameeskr/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-text-subtle hover:text-link-default transition-colors mx-2"
@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
           </a>
           <span className="text-text-subtle">|</span>
           <a
-            href="#" // Replace with your Twitter/X URL later
+            href="https://x.com/ramees_kr"
             target="_blank"
             rel="noopener noreferrer"
             className="text-text-subtle hover:text-link-default transition-colors mx-2"

@@ -7,6 +7,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import rehypePrettyCode from "rehype-pretty-code";
 import type { Options as RehypePrettyCodeOptions } from "rehype-pretty-code";
+import remarkGfm from "remark-gfm";
 // Optional: For typing nodes in rehype-pretty-code callbacks
 // import type { LineElement, CharsElement } from 'rehype-pretty-code';
 
@@ -120,9 +121,7 @@ export default async function ProjectDetailPage({
 
   // Updated mdxOptions to include rehype-pretty-code
   const mdxOptions = {
-    remarkPlugins: [
-      // Add any remark plugins here, e.g., remarkGfm if you install it
-    ],
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [() => rehypePrettyCode(prettyCodeOptions)],
   };
 

@@ -11,9 +11,9 @@ const navItems = [
   { href: "/", label: "Home" },
   { href: "/blog", label: "Blog" },
   { href: "/projects", label: "Projects" },
-  { href: "/roadmap", label: "Roadmap" },
-  { href: "/skills", label: "Skills" },
-  { href: "/about", label: "About" },
+  //{ href: "/roadmap", label: "Roadmap" },
+  //{ href: "/skills", label: "Skills" },
+  //{ href: "/about", label: "About" },
 ];
 
 const MenuIcon = () => (

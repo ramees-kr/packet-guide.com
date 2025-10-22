@@ -1,56 +1,129 @@
 // site/src/app/page.tsx
-import type { Metadata } from "next"; // Add this import
+import type { Metadata } from "next";
+import Link from "next/link";
+import { getSortedPostsData, PostMeta } from "@/lib/content";
+import { getSortedProjectsData, ProjectData } from "@/lib/content";
 
-// Add this metadata object
 export const metadata: Metadata = {
-  title: "Packet Guide | Home", // Or just 'Packet Guide' if you prefer for home
+  title: "Packet Guide | Home",
   description:
-    "A minimalist developer portfolio and technical blog by Packet Pilot, focusing on cloud, infrastructure, and software engineering.",
-  // You can add keywords here if desired:
-  // keywords: ['portfolio', 'blog', 'cloud engineering', 'infrastructure', 'devops', 'next.js'],
+    "Documenting a journey through the command line, SaaS, and building fun, interesting things.",
 };
+
+// Helper function to format date
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
 export default function HomePage() {
+  // Fetch the latest 3 posts and projects
+  const latestPosts: PostMeta[] = getSortedPostsData().slice(0, 3);
+  const latestProjects: ProjectData[] = getSortedProjectsData().slice(0, 3);
+
   return (
-    <div className="py-8">
-      {" "}
-      {/* Add some padding */}
-      <h1 className="text-4xl font-bold text-text-default mb-6">
-        Welcome to Packet Guide
-      </h1>
-      <div className="space-y-4 text-text-default">
-        <p>
-          This is the beginning of a minimalist developer portfolio and blog.
-          The goal is to create a clean, fast, and distraction-free reading
-          experience. We&apos;re currently setting up the foundational styles,{" "}
-          {/* Changed We're to We&apos;re */}
-          including the &quot;Inter&quot; font you&apos;re seeing now.{" "}
-          {/* Changed you're to you&apos;re, and "Inter" to &quot;Inter&quot; just to be safe, though quotes within text are often fine unless they conflict with JSX attribute quotes. */}
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur.
-        </p>
-        <p>
-          Here&apos;s some <code>inline code</code> using the monospace font,
-          and below is a preformatted block:{" "}
-          {/* Changed Here's to Here&apos;s */}
-        </p>
-        <pre className="bg-surface-background p-4 rounded-md overflow-x-auto">
-          <code>
-            {`function greet(name) {
-  console.log(\`Hello, \${name}!\`);
-}`}
-          </code>
-        </pre>
-        <p>
-          We will continue to build out the site, focusing on content clarity
-          and a simple, elegant design.
-        </p>
-      </div>
+    <div className="py-8 md:py-12">
+      {/* Introduction Section */}
+      <section className="mb-12">
+        <h1 className="text-4xl font-bold text-text-default mb-6">
+          Welcome to Packet Guide
+        </h1>
+        <div className="space-y-4 text-text-default dark:text-gray-300 max-w-readable">
+          <p>
+            Welcome to my digital workbench! This site is where I share the
+            small, interesting, and hopefully fun things I build during my
+            journey through the worlds of the <strong>command line</strong>,{" "}
+            <strong>SaaS</strong>, and
+            <strong> cloud infrastructure</strong>.
+          </p>
+          <p>
+            I genuinely enjoy building stuff, figuring out how things work, and
+            automating repetitive tasks. Lately, I've also gotten pretty good at
+            making <strong>GPTs</strong> write prompts for me to get things
+            done.
+          </p>
+          <p>
+            Stick around as I document my projects and learnings here. See you
+            around!
+          </p>
+        </div>
+      </section>
+
+      {/* Recent Activity Section */}
+      <section className="mt-16">
+        <h2 className="text-3xl font-bold text-text-default mb-8 border-b border-surface-background dark:border-gray-700 pb-2">
+          Recent Activity
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+          {/* Latest Articles Column */}
+          {latestPosts.length > 0 && (
+            <div>
+              <h3 className="text-xl font-semibold text-text-default mb-4">
+                Latest Articles
+              </h3>
+              <ul className="space-y-3">
+                {latestPosts.map((post) => (
+                  <li key={post.slug}>
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="text-link-default hover:underline hover:text-link-hover block"
+                    >
+                      {post.title}
+                    </Link>
+                    <p className="text-sm text-text-subtle">
+                      {formatDate(post.date)}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6">
+                <Link
+                  href="/blog"
+                  className="text-sm text-link-default hover:underline"
+                >
+                  View all articles &rarr;
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Recent Projects Column */}
+          {latestProjects.length > 0 && (
+            <div>
+              <h3 className="text-xl font-semibold text-text-default mb-4">
+                Recent Projects
+              </h3>
+              <ul className="space-y-3">
+                {latestProjects.map((project) => (
+                  <li key={project.slug}>
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      className="text-link-default hover:underline hover:text-link-hover block"
+                    >
+                      {project.title}
+                    </Link>
+                    <p className="text-sm text-text-subtle">
+                      Updated: {formatDate(project.date)}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6">
+                <Link
+                  href="/projects"
+                  className="text-sm text-link-default hover:underline"
+                >
+                  View all projects &rarr;
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

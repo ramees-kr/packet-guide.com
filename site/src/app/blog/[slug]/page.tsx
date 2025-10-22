@@ -7,6 +7,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import rehypePrettyCode from "rehype-pretty-code"; // Import the plugin
 import type { Options as RehypePrettyCodeOptions } from "rehype-pretty-code";
+import remarkGfm from "remark-gfm";
 
 // Update Props type: params is now a Promise
 type Props = {
@@ -92,11 +93,8 @@ export default async function BlogPostPage({ params: paramsPromise }: Props) {
     keepBackground: true, // Default, good for this approach
   };
 
-  // Updated mdxOptions to include rehype-pretty-code
   const mdxOptions = {
-    remarkPlugins: [
-      // remarkGfm,
-    ],
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [() => rehypePrettyCode(prettyCodeOptions)],
   };
 
