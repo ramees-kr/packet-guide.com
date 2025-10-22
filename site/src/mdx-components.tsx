@@ -26,7 +26,7 @@ const MdxImage = (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
           src={src}
           alt={alt || "Content image"} // Always provide meaningful alt text in your MDX.
           fill // The `fill` prop makes the image responsive and fill its parent (the span).
-          style={{ objectFit: "contain" }} // 'contain' ensures the whole image is visible within the span.
+          style={{ objectFit: "contain" }} // 'cover' ensures the image covers the entire span.
           // Other options: 'cover', 'fill' (as in prop name), 'none', 'scale-down'.
           className="rounded-md" // Optional: adds rounded corners to your images.
           {...otherProps} // Spreads any other valid HTML attributes (like title, id) to the Image.
