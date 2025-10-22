@@ -41,8 +41,8 @@ export default function HomePage() {
           </p>
           <p>
             I genuinely enjoy building stuff, figuring out how things work, and
-            automating repetitive tasks. Lately, I've also gotten pretty good at
-            making <strong>GPTs</strong> write prompts for me to get things
+            automating repetitive tasks. Lately, I have also gotten pretty good
+            at making <strong>GPTs</strong> write prompts for me to get things
             done.
           </p>
           <p>
