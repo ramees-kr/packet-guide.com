@@ -1,0 +1,16 @@
+---
+import { getCollection, render } from "astro:content";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+
+const page = (await getCollection("pages")).find((entry) => entry.id === "whoami");
+if (!page) throw new Error("Missing whoami page content");
+const { Content } = await render(page);
+---
+
+<ContentLayout
+  title="About Packet Guide"
+  description="The person and working style behind Packet Guide."
+  eyebrow="About"
+>
+  <Content />
+</ContentLayout>

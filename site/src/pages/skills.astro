@@ -1,0 +1,16 @@
+---
+import { getCollection, render } from "astro:content";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+
+const page = (await getCollection("pages")).find((entry) => entry.id === "skills_summary");
+if (!page) throw new Error("Missing skills page content");
+const { Content } = await render(page);
+---
+
+<ContentLayout
+  title="Skills"
+  description="A compact map of the tools and systems Packet Guide is currently exploring."
+  eyebrow="Toolbox"
+>
+  <Content />
+</ContentLayout>

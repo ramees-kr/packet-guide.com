@@ -1,0 +1,34 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { formatDate, slugFromEntry, sortByNewest } from "@/lib/site";
+
+const projects = sortByNewest(await getCollection("projects"));
+---
+
+<BaseLayout title="Projects" description="A practical lab notebook of Packet Guide infrastructure projects.">
+  <section class="listing-page">
+    <header class="listing-header">
+      <p class="eyebrow">Build log</p>
+      <h1>Projects</h1>
+      <p>Small, practical builds that turn networking and platform ideas into something visible, clickable, or automatable.</p>
+    </header>
+
+    <div class="grid">
+      {
+        projects.map((project) => (
+          <a class="card" href={`/projects/${slugFromEntry(project)}`}>
+            <div class="meta">
+              <time datetime={project.data.date.toISOString()}>{formatDate(project.data.date)}</time>
+            </div>
+            <h2>{project.data.title}</h2>
+            <p>{project.data.description}</p>
+            <div class="tags">
+              {project.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

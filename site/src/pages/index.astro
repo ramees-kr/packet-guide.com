@@ -1,0 +1,91 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { formatDate, readingMinutes, slugFromEntry, sortByNewest } from "@/lib/site";
+
+const posts = sortByNewest(await getCollection("blog")).slice(0, 3);
+const projects = sortByNewest(await getCollection("projects")).slice(0, 3);
+---
+
+<BaseLayout
+  title="Packet Guide"
+  description="Field notes from networking, cloud infrastructure, automation, and the command line."
+>
+  <section class="hero">
+    <div>
+      <p class="eyebrow">DNS, cloud, automation, and useful trouble</p>
+      <h1>Packet Guide</h1>
+      <p class="hero-copy">
+        A personal field journal for building, breaking, and understanding the systems that move packets,
+        jobs, alerts, and ideas from one place to another.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="/blog">Read field notes</a>
+        <a class="button" href="/projects">View projects</a>
+      </div>
+    </div>
+
+    <aside class="terminal-card" aria-label="Packet Guide status">
+      <div class="terminal-bar"><span></span><span></span><span></span></div>
+      <pre>packet-guide status
+
+link: up
+route: learning in public
+stack: astro + mdx
+focus: practical infrastructure notes</pre>
+    </aside>
+  </section>
+
+  <section>
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Latest packets</p>
+        <h2>Recent writing</h2>
+      </div>
+      <a href="/blog">All posts</a>
+    </div>
+    <div class="grid">
+      {
+        posts.map((post) => (
+          <a class="card" href={`/blog/${slugFromEntry(post)}`}>
+            <div class="meta">
+              <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+              <span>{readingMinutes(post.body)} min read</span>
+            </div>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.excerpt}</p>
+            <div class="tags">
+              {post.data.tags.slice(0, 4).map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section>
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Lab notes</p>
+        <h2>Recent projects</h2>
+      </div>
+      <a href="/projects">All projects</a>
+    </div>
+    <div class="grid">
+      {
+        projects.map((project) => (
+          <a class="card" href={`/projects/${slugFromEntry(project)}`}>
+            <div class="meta">
+              <time datetime={project.data.date.toISOString()}>{formatDate(project.data.date)}</time>
+            </div>
+            <h3>{project.data.title}</h3>
+            <p>{project.data.description}</p>
+            <div class="tags">
+              {project.data.tags.slice(0, 4).map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

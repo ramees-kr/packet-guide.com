@@ -1,0 +1,76 @@
+---
+import "../styles/global.css";
+import { siteDescription, siteTitle } from "@/lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = siteTitle, description = siteDescription } = Astro.props;
+const pageTitle = title === siteTitle ? siteTitle : `${title} | ${siteTitle}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url.href} />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <title>{pageTitle}</title>
+    <script is:inline>
+      const savedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    </script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="Packet Guide home">
+          <span class="brand-mark">
+            <img src="/icon.svg" alt="" width="32" height="32" />
+          </span>
+          <span>
+            <strong>Packet Guide</strong>
+            <small>Notes from the network edge</small>
+          </span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="/blog">Blog</a>
+          <a href="/projects">Projects</a>
+          <a href="/about">About</a>
+          <a href="/roadmap">Roadmap</a>
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme">
+            <span aria-hidden="true">Theme</span>
+          </button>
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <p>Packet Guide is built with Astro, Markdown, and a bias toward useful field notes.</p>
+        <p><a href="/blog">Read the blog</a> or <a href="/projects">browse projects</a>.</p>
+      </footer>
+    </div>
+
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>(".theme-toggle");
+      toggle?.addEventListener("click", () => {
+        const isDark = document.documentElement.dataset.theme === "dark";
+        document.documentElement.dataset.theme = isDark ? "light" : "dark";
+        localStorage.setItem("theme", isDark ? "light" : "dark");
+      });
+    </script>
+  </body>
+</html>

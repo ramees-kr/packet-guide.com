@@ -1,0 +1,16 @@
+---
+import { getCollection, render } from "astro:content";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+
+const page = (await getCollection("pages")).find((entry) => entry.id === "roadmap");
+if (!page) throw new Error("Missing roadmap page content");
+const { Content } = await render(page);
+---
+
+<ContentLayout
+  title="Roadmap"
+  description="Planned improvements for Packet Guide content, tooling, and publishing."
+  eyebrow="Next hops"
+>
+  <Content />
+</ContentLayout>

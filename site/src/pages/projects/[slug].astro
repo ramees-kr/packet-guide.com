@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from "astro:content";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { formatDate, slugFromEntry } from "@/lib/site";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: slugFromEntry(project) },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<ContentLayout title={project.data.title} description={project.data.description} eyebrow="Project">
+  <div class="meta">
+    <time datetime={project.data.date.toISOString()}>{formatDate(project.data.date)}</time>
+    {project.data.repoUrl && <a href={project.data.repoUrl}>Source code</a>}
+    {project.data.demoUrl && <a href={project.data.demoUrl}>Live demo</a>}
+  </div>
+  <div class="tags">
+    {project.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+  </div>
+  <Content />
+  <p><a href="/projects">Back to all projects</a></p>
+</ContentLayout>
